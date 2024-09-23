@@ -1,11 +1,11 @@
 const info = (info) => {
-  console.log(info)
+    console.log(info)
 }
 const error = (error) => {
-  console.log(error)
+    console.log(error)
 }
 
-module.exports={
-  info,
-  error
+module.exports = {
+    info,
+    error,
 }
