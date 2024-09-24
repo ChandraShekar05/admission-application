@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = 'http://localhost:3000/api/mail'
+const url = 'http://localhost:3001/api/mail'
 
 export const sendMail = async (applicants) => {
     const promises = applicants.map(applicant => {

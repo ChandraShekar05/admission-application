@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = 'http://localhost:3000/api/courses'
+const url = 'http://localhost:3001/api/courses'
 
 
 
