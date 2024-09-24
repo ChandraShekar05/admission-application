@@ -91,9 +91,9 @@ const applicantSchema = new mongoose.Schema(
         },
         lastUpdatedBy: {
             type: String,
-            required: [true, "Full Name is required"],
+            required: [true, "Last Updated by"],
             trim: true,
-            default: null,
+            default: 'user',
 
             /* type: mongoose.Schema.Types.ObjectId, // Assuming Admins are stored in a separate collection
     ref: 'Admin',
