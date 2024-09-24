@@ -3,10 +3,9 @@ import DrawerAppBar from '../components/usercomponents/DrawerAppBar';
 import CompanyInfo from '../components/usercomponents/CompanyInfo';
 import CourseCards from '../components/usercomponents/CourseCards';
 import Footer from '../components/usercomponents/Footer';
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getAllCourses } from '../services/coursesApi';
-import { Container, Typography,Divider } from '@mui/material';
-import { Margin } from '@mui/icons-material';
+import { Container, Typography } from '@mui/material';
 
 const User = () => {
 
