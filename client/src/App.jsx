@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import User from './pages/User';
-import Admin from './pages/Admin';
+import Admin from './pages/admin';
 import ApplicantData from './components/admin/ApplicantData';
 
 function App() {

@@ -11,7 +11,7 @@ function CourseCards({ name, subheader, description, amount, scrollToForm }) {
         width: '500px',
         borderRadius: 3,
         p: 1,
-        mb: 5,
+        // mb: 5,
         transition: '0.3s', 
         '&:hover': {
           transform: 'scale(1.03)', 

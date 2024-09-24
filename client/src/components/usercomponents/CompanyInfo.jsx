@@ -24,7 +24,7 @@ const CompanyInfo = () => {
                             sx: {
                                 fontSize: '2rem',
                                 fontWeight: 'bold',
-                                color: '#3959B64',
+                                color: '#395B64',
                             },
                         }}
                     />
