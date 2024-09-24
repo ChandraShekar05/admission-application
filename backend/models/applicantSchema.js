@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 
+
 const applicantSchema = new mongoose.Schema(
     {
         // Personal Information
@@ -91,7 +92,7 @@ const applicantSchema = new mongoose.Schema(
         },
         lastUpdatedBy: {
             type: String,
-            required: [true, "Full Name is required"],
+            required: [true, "Last Updated by"],
             trim: true,
             default: 'user',
 
