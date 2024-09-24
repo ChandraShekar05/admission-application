@@ -43,7 +43,7 @@ export default function Form({ courses }) {
     const collectData = async (e) => {
         e.preventDefault();
         try {
-            let result = await fetch('http://localhost:3000/api/applications', {
+            let result = await fetch('http://localhost:3001/api/applications', {
                 method: 'post',
                 body: JSON.stringify({
                     fullName,
@@ -95,8 +95,7 @@ export default function Form({ courses }) {
     };
 
     const sendMail = () => {
-        axios
-            .get('http://localhost:3000/api/send-email', {
+        axios.get('http://localhost:3001/api/send-email', {
                 params: {
                     emailAddress,
                     fullName,
@@ -304,3 +303,4 @@ export default function Form({ courses }) {
         </Box>
     );
 }
+
