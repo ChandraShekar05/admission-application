@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
 
+
 const applicantSchema = new mongoose.Schema(
     {
         // Personal Information

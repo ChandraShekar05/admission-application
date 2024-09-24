@@ -8,6 +8,21 @@ applicantRouter.get("/", async (request, response) => {
     response.json(blogs)
 })
 
+applicantRouter.get("/:id", async (request, response, next) => {
+    const id = request.params.id
+    try {
+        const blog = await Blog.findById(id).populate("preferredCourse.course", {
+            name: 1,
+        });
+        if (!blog) {
+            return response.status(404).json({ error: "Blog not found" })
+        }
+        response.json(blog)
+    } catch (error) {
+        next(error)
+    }
+})
+
 applicantRouter.post("/", async (request, response) => {
     const blog = new Blog(request.body)
     const result = await blog.save()
@@ -29,15 +44,21 @@ applicantRouter.delete("/:id", async (request, response, next) => {
 
 applicantRouter.put("/:id", async (req, res, next) => {
     const id = req.params.id
-    const blog = req.body
+    const { status } = req.body
 
     try {
-        const updatedBlog = await Blog.findByIdAndUpdate(id, blog, {
-            new: true,
-        })
-        res.status(200).json(updatedBlog)
+        console.log("Status:", status);
+        const applicant = await Blog.findByIdAndUpdate(
+            id,
+            { status },
+            { new: true, runValidators: true }
+        );
+        if (!applicant) {
+            return res.status(404).send({ error: 'Applicant not found' });
+        }
+        res.send(applicant);
     } catch (error) {
-        next(error)
+        res.status(500).send({ error: 'Server error' });
     }
 })
 

@@ -96,10 +96,11 @@ export default function Form({ courses }) {
 
     const sendMail = () => {
         axios
-            .get('http://localhost:3001/api/send-email', {
+            .get('http://localhost:3001/api/mail/send-email', {
                 params: {
                     emailAddress,
                     fullName,
+                    status: 'open',
                 },
             })
             .then(() => {
@@ -304,5 +305,4 @@ export default function Form({ courses }) {
         </Box>
     );
 }
-
 

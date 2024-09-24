@@ -80,5 +80,3 @@ function CourseCards({ name, subheader, description, amount, scrollToForm }) {
 
 export default CourseCards;
 
-
-

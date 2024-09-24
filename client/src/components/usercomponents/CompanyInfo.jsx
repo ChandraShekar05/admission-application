@@ -39,6 +39,6 @@ const CompanyInfo = () => {
     );
 };
 
-export default CompanyInfo;
 
+export default CompanyInfo;
 
