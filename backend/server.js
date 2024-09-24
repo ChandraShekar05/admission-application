@@ -2,12 +2,12 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const mongoose = require("mongoose")
-
 const applicantRouter = require("./controllers/applicants")
 const courseRouter = require("./controllers/courses")
 const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
 const config = require("./utils/config")
+const mailRouter = require("./sendMail/mail")
 
 mongoose.set("strictQuery", false)
 
@@ -27,6 +27,7 @@ app.use(express.json())
 
 app.use("/api/applications", applicantRouter)
 app.use("/api/courses", courseRouter)
+app.use("/api/mail", mailRouter)
 
 // handler for error handling during requests
 app.use(middleware.errorHandler)
