@@ -3,9 +3,9 @@ import DrawerAppBar from '../components/usercomponents/DrawerAppBar';
 import CompanyInfo from '../components/usercomponents/CompanyInfo';
 import CourseCards from '../components/usercomponents/CourseCards';
 import Footer from '../components/usercomponents/Footer';
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getAllCourses } from '../services/coursesApi';
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 const User = () => {
 
@@ -52,7 +52,12 @@ const User = () => {
             <div ref={aboutRef}>
                 <CompanyInfo />
             </div>
-            <Container maxWidth="lg">
+            <Container sx={{mb:5,userSelect:'none'}} maxWidth="lg">
+                <Typography variant='h3'color='#395B64' textAlign={'center'} sx={{mb:2,
+                                fontSize: '2rem',
+                                fontWeight: 'bold',
+                                }}
+                >Availabe Courses</Typography>
                 <div ref={courseCardsRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
                     {courses.map((course, index) => (
                         <CourseCards
@@ -66,10 +71,10 @@ const User = () => {
                     ))}
                 </div>
             </Container>
-            <div ref={formRef}>
+            <div  ref={formRef}>
                 <Form courses={courses} />
             </div>
-            <div ref={contactsRef}>
+            <div  ref={contactsRef}>
                 <Footer />
             </div>
         </div>
