@@ -57,7 +57,7 @@ const User = () => {
                                 fontSize: '2rem',
                                 fontWeight: 'bold',
                                 }}
-                >Availabe Courses</Typography>
+                >Available Courses</Typography>
                 <div ref={courseCardsRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
                     {courses.map((course, index) => (
                         <CourseCards
