@@ -27,7 +27,7 @@ const courseSchema = new mongoose.Schema(
             type: String,
             required: [true, "Course duration is required"], // Required field with a custom message
             match: [
-                /\d+\s*(weeks|months|years)/,
+                /\d+\s*(week|month|year)s?/i,
                 "Use formats like '3 months', '6 weeks', etc.",
             ],
         },

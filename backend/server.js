@@ -9,6 +9,7 @@ const logger = require("./utils/logger")
 const config = require("./utils/config")
 
 const mailRouter = require("./sendMail/mail")
+const router = require("./sendMail/email")
 
 
 mongoose.set("strictQuery", false)
@@ -31,6 +32,7 @@ app.use("/api/applications", applicantRouter)
 app.use("/api/courses", courseRouter)
 
 app.use("/api/mail", mailRouter)
+app.use("/api/send-email", router)
 
 
 // handler for error handling during requests

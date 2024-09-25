@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Typography, Box } from '@mui/material';
 import { getApplicantById } from '../../services/applicantsApi'; 
@@ -57,7 +57,7 @@ const ApplicantData = () => {
                     height: '100%', // Full viewport height
                 }}
             >
-                <Box sx={{ my: 4 }}>
+                <Box sx={{userSelect:'none', my: 4 }}>
                     <Typography variant="h4" component="h1" gutterBottom sx={{fontWeight: 'bold'}}>
                         Applicant Details
                     </Typography>

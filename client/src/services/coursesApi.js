@@ -4,28 +4,24 @@ const url = 'http://localhost:3001/api/courses'
 
 
 
-const getAllCourses =async ()=>{
+const getAllCourses =()=>{
    const request = axios.get(url);
-   const response = await request;
-    return response.data;
+   return request.then(response=>response.data);
 }
 
-const addNewCourse =async (newPerson)=>{
+const addNewCourse =(newPerson)=>{
     const request = axios.post(url,newPerson)
-    const response = await request;
-    return response.data;
+    return request.then(response=>response.data);
 }
 
-const deleteCourse = async (id)=>{
+const deleteCourse = (id)=>{
     const request = axios.delete(`${url}/${id}`);
-    const response = await request;
-    return response.data;
+    return request.then(response=>response.data)
 }
 
-const updateCourse =async (id,updatePreson)=>{
+const updateCourse =(id,updatePreson)=>{
     const request = axios.put(`${url}/${id}`,updatePreson);
-    const response = await request;
-    return response.data;
+    return request.then(response=>response.data)
 }
 
 export {
