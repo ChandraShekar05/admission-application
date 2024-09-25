@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import CourseTable from '../components/admin/CourseTable';
 import { getAllCourses } from '../services/coursesApi';
 
