@@ -11,12 +11,16 @@ import {
 import { addNewCourse,updateCourse } from '../../services/coursesApi';
 
 const FormDialog = ({ openForm, handleClose, setCourses, selectedCourse, editCourse }) => {
-  const [formValues, setFormValues] = useState({
+
+  
+  const emptyForm = {
     name: '',
     duration: '',
     amount: '',
     description: ''
-  });
+  };
+  
+  const [formValues, setFormValues] = useState(emptyForm);
 
   const [debouncedValues, setDebouncedValues] = useState(formValues);
 
@@ -40,6 +44,14 @@ const FormDialog = ({ openForm, handleClose, setCourses, selectedCourse, editCou
         amount: selectedCourse.amount || '',
         description: selectedCourse.description || ''
       });
+    }
+    else{
+      setFormValues({
+        name: '',
+        duration: '',
+        amount: '',
+        description: ''
+      })
     }
   }, [editCourse, selectedCourse]);
 
@@ -69,9 +81,16 @@ const FormDialog = ({ openForm, handleClose, setCourses, selectedCourse, editCou
       addNewCourse(debouncedValues)
         .then((data) => setCourses((prev) => prev.concat(data)))
         .catch((error) => console.error(error));
-    }
 
+    }
+    resetForm(); // Reset form before closing
     handleClose();
+    
+  };
+
+  const resetForm = () => {
+    setFormValues(emptyForm);
+    setDebouncedValues(emptyForm);
   };
 
   return (
@@ -143,7 +162,7 @@ const FormDialog = ({ openForm, handleClose, setCourses, selectedCourse, editCou
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} variant="outlined">
+          <Button onClick={(handleClose)} variant="outlined">
             Cancel
           </Button>
           <Button type="submit" color="success" variant="contained">
