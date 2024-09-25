@@ -7,22 +7,23 @@ import {
     IconButton,
     Alert,
     Container,
-    Select,
-    MenuItem
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import Chip from "@mui/material/Chip"
+// import Navbar from "../components/admin/Navbar"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import { Link } from "react-router-dom"
-import { getApplicants, updateApplicantStatus } from "../services/applicantsApi"
+import { getApplicants } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
+import { getAllCourses } from "../services/coursesApi"
 
+import CourseTable from "../components/admin/CourseTable"
 
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
     const [selectedApplicants, setSelectedApplicants] = useState([])
+    const [courses, setCourses] = useState([])
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-    const [statusChanges, setStatusChanges] = useState({})
     const paginationModel = { page: 0, pageSize: 5 }
 
     useEffect(() => {
@@ -33,6 +34,12 @@ const Admin = () => {
             .catch((error) =>
                 console.error("Error fetching applicants:", error)
             )
+
+        getAllCourses()
+            .then((courses) => {
+                setCourses(courses)
+            })
+            .catch((error) => console.error("Error fetching courses:", error))
     }, [])
 
     const getStatusColor = (status) => {
@@ -48,31 +55,6 @@ const Admin = () => {
                 return "error"
             default:
                 return "default"
-        }
-    }
-
-    const handleStatusChange = (id, newStatus) => {
-        setStatusChanges((prev) => ({ ...prev, [id]: newStatus }))
-    }
-
-    const handleUpdateStatus = async (id) => {
-        const newStatus = statusChanges[id]
-        if (newStatus) {
-            try {
-                await updateApplicantStatus(id, newStatus)
-                setApplicants((prev) =>
-                    prev.map((applicant) =>
-                        applicant.id === id
-                            ? { ...applicant, status: newStatus }
-                            : applicant
-                    )
-                )
-                setShowSuccessAlert(true)
-                setTimeout(() => setShowSuccessAlert(false), 3000)
-            } catch (error) {
-                console.error("Error updating status:", error)
-                alert("Failed to update status")
-            }
         }
     }
 
@@ -138,50 +120,12 @@ const Admin = () => {
             fontWeight: "bold",
             headerClassName: "header-cell",
             renderCell: (params) => (
-                <Select
-                    value={statusChanges[params.row.id] || params.value}
-                    onChange={(e) =>
-                        handleStatusChange(params.row.id, e.target.value)
-                    }
-                    fullWidth
-                >
-                    <MenuItem value="Open">
-                        <Chip
-                            label="Open"
-                            sx={{ width: "15ch", fontWeight: "bold" }}
-                            color={getStatusColor(params.value)}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Followup">
-                        <Chip
-                            label={params.value}
-                            sx={{ width: "15ch", fontWeight: "bold" }}
-                            color={getStatusColor(params.value)}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Mail Sent">
-                        <Chip
-                            label={params.value}
-                            sx={{ width: "15ch", fontWeight: "bold" }}
-                            color={getStatusColor(params.value)}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Accepted">
-                        <Chip
-                            label={params.value}
-                            sx={{ width: "15ch", fontWeight: "bold" }}
-                            color={getStatusColor(params.value)}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Rejected">
-                        <Chip
-                            label={params.value}
-                            sx={{ width: "15ch", fontWeight: "bold" }}
-                            color={getStatusColor(params.value)}
-                        />
-                    </MenuItem>
-                </Select>
-            )
+                <Chip
+                    label={params.value}
+                    sx={{ width: "15ch", fontWeight: "bold" }}
+                    color={getStatusColor(params.value)}
+                />
+            ),
         },
         {
             field: "lastUpdatedBy",
@@ -208,23 +152,6 @@ const Admin = () => {
                 >
                     <ChevronRightIcon />
                 </IconButton>
-            ),
-        },
-        {
-            field: "action",
-            headerName: "Action",
-            width: 150,
-            resizable: false,
-            fontWeight: "bold",
-            headerClassName: "header-cell",
-            renderCell: (params) => (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleUpdateStatus(params.row.id)}
-                >
-                    Update
-                </Button>
             ),
         },
     ]
@@ -323,7 +250,7 @@ const Admin = () => {
                                 "& .MuiDataGrid-menuIconButton": {
                                     color: "#E7F6F2", // Color of the menu button when clicked
                                 },
-                                "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-checkboxInput svg": {
+                                "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-checkboxInput svg":{
                                     color: "#E7F6F2", // Header checkbox color
                                 }
                             }}
@@ -331,6 +258,8 @@ const Admin = () => {
                     </Paper>
                 </Box>
             </Container>
+            <CourseTable courses={courses} setCourses={setCourses} />
+
         </Box>
     )
 }
