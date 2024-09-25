@@ -107,7 +107,7 @@ export default function Form({ courses }) {
 
     const sendMail = () => {
         axios
-            .get("http://localhost:3001/api/mail/send-email", {
+            .get("http://localhost:3001/api/send-email", {
                 params: {
                     emailAddress,
                     fullName,
@@ -136,6 +136,7 @@ export default function Form({ courses }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                userSelect:'none'
             }}
         >
             <Container sx={{ width: "auto" }}>

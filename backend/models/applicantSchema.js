@@ -36,7 +36,9 @@ const applicantSchema = new mongoose.Schema(
                 required: [true, "Email Address is required"],
                 lowercase: true,
                 trim: true,
+                // eslint-disable-next-line no-useless-escape
                 match: [/.+\@.+\..+/, "Please enter a valid email address"],
+                unique:true
             },
         },
 
@@ -113,7 +115,34 @@ applicantSchema.set("toJSON", {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+
+
+        // Format the date
+        if (returnedObject.createdAt) {
+            // Adjust the timezone as needed
+            returnedObject.createdAt = new Date(returnedObject.createdAt).toLocaleString("en-US", {
+                timeZone: "Asia/Kolkata", // Change to your desired timezone
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short',
+            })
+            returnedObject.updatedAt = new Date(returnedObject.updatedAt).toLocaleString("en-US", {
+                timeZone: "Asia/Kolkata", // Change to your desired timezone
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short',
+            })
+        }
     },
+
 })
 
 module.exports = mongoose.model("Applicant", applicantSchema)

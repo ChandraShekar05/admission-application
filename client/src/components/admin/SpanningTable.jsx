@@ -1,8 +1,7 @@
-import * as React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateApplicantStatus } from '../../services/applicantsApi';
-import { Table, TableBody, TableContainer, TableCell, TableHead, TableRow, Paper, Button, Select, MenuItem, Container } from '@mui/material';
+import { Table, TableBody, TableContainer, TableCell, TableRow, Paper, Button, Select, MenuItem,  } from '@mui/material';
 
 const SpanningTable = ({ rows, applicantId, onUpdate }) => {
     const [editMode, setEditMode] = useState(false);
@@ -15,6 +14,7 @@ const SpanningTable = ({ rows, applicantId, onUpdate }) => {
 
     const handleSaveClick = async () => {
         try {
+            // eslint-disable-next-line no-unused-vars
             const response = await updateApplicantStatus(applicantId, status);
             setEditMode(false);
             onUpdate();
@@ -25,7 +25,7 @@ const SpanningTable = ({ rows, applicantId, onUpdate }) => {
     };
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} elevation={3}  sx={{ borderRadius:5,border:1,borderColor:'divider'}}>
             <Table sx={{ minWidth: 700 }} aria-label="spanning table">
                 <TableBody>
                     {rows.map((row) => (

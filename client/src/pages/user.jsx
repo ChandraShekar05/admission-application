@@ -52,7 +52,7 @@ const User = () => {
             <div ref={aboutRef}>
                 <CompanyInfo />
             </div>
-            <Container sx={{mb:5}} maxWidth="lg">
+            <Container sx={{mb:5,userSelect:'none'}} maxWidth="lg">
                 <Typography variant='h3'color='#395B64' textAlign={'center'} sx={{mb:2,
                                 fontSize: '2rem',
                                 fontWeight: 'bold',

@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 })
 
 // Define the email sending route
-router.get("/send-email", (req, res) => {
+router.get("/", (req, res) => {
     const { emailAddress, fullName } = req.query
 
     if (!emailAddress || !fullName) {

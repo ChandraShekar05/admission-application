@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import {
     Box,
     Typography,
@@ -6,6 +6,7 @@ import {
     Paper,
     IconButton,
     Alert,
+    Container,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import Chip from "@mui/material/Chip"
@@ -16,11 +17,14 @@ import { getApplicants } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
 import { getAllCourses } from "../services/coursesApi"
 
+import CourseTable from "../components/admin/CourseTable"
+
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
     const [selectedApplicants, setSelectedApplicants] = useState([])
     const [courses, setCourses] = useState([])
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const paginationModel = { page: 0, pageSize: 5 }
 
     useEffect(() => {
         getApplicants()
@@ -135,22 +139,21 @@ const Admin = () => {
             field: "view",
             headerName: "View",
             resizable: false,
-            headerClassName: 'header-cell',
-            sortable: false,     // Disables sorting
-            filterable: false,   // Disables filtering
-            disableColumnMenu: true,  // Disables column menu (three dots)
-            hideSortIcons: true,  // Hides the sort icons
+            headerClassName: "header-cell",
+            sortable: false, // Disables sorting
+            filterable: false, // Disables filtering
+            disableColumnMenu: true, // Disables column menu (three dots)
+            hideSortIcons: true, // Hides the sort icons
             renderCell: (params) => (
-              <IconButton
-                component={Link}
-                to={`/admin/applicants/${params.row.id}`}
-                sx={{ "&:hover": { backgroundColor: "white" } }}
-              >
-                <ChevronRightIcon />
-              </IconButton>
+                <IconButton
+                    component={Link}
+                    to={`/admin/applicants/${params.row.id}`}
+                    sx={{ "&:hover": { backgroundColor: "white" } }}
+                >
+                    <ChevronRightIcon />
+                </IconButton>
             ),
-          }
-          
+        },
     ]
 
     const rows = applicants.map((applicant) => {
@@ -168,7 +171,7 @@ const Admin = () => {
     return (
         <Box>
             {/* <Navbar /> */}
-            <Box sx={{  mx: 8, p: 0, justifyItems: "center" }}>
+            <Container sx={{ justifyItems: "center" }}>
                 {showSuccessAlert && (
                     <Alert severity="success">Mail sent successfully.</Alert>
                 )}
@@ -181,13 +184,8 @@ const Admin = () => {
                         flexDirection: "column",
                     }}
                 >
-                    <Typography
-                        variant="h4"
-                        component="h1"
-                        gutterBottom
-                        fontWeight="bold"
-                    >
-                        Applications
+                    <Typography variant="h3" color="#2C3333" sx={{ mb: 3 }}>
+                        Applications Data
                     </Typography>
                     {selectedApplicants.length > 0 && (
                         <Button
@@ -198,13 +196,28 @@ const Admin = () => {
                             send mail
                         </Button>
                     )}
-                    <Paper sx={{ width: "100%", overflowX: "auto" }}>
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            border: 1,
+                            borderColor: "divider",
+                            borderRadius: 3,
+                            width: "100%",
+                            overflowX: "auto",
+                        }}
+                    >
                         <DataGrid
                             rows={rows}
                             columns={columns}
                             getRowId={(row) => row.id}
-                            pageSize={10}
-                            rowsPerPageOptions={[5, 10]}
+                            pagination
+                            // paginationModel={paginationModel}
+                            // onPaginationModelChange={(newPaginationModel) =>
+                            //     setPaginationModel(newPaginationModel)
+                            // }
+                            // pageSizeOptions={[5, 10]}
+                            initialState={{ pagination: { paginationModel } }}
+                            pageSizeOptions={[5, 10]}
                             checkboxSelection
                             disableSelectionOnClick
                             resizable={false}
@@ -213,22 +226,40 @@ const Admin = () => {
                             onRowSelectionModelChange={(
                                 newRowSelectionModel
                             ) => {
+                                console.log(newRowSelectionModel)
                                 setSelectedApplicants(newRowSelectionModel)
                             }}
-                            // sx={{
-                            //     '& .MuiDataGrid-columnHeader': {
-                            //         backgroundColor: 'purple',
-                            //     },
-                            //     '& .header-cell': {
-                            //         // backgroundColor: 'purple',
-                            //         // color: 'white',
-                            //         fontWeight: 'bold',
-                            //     }
-                            // }}
+                            sx={{
+                                border: "none",
+                                "& .MuiDataGrid-columnHeader": {
+                                    backgroundColor: "#2C3333",
+                                },
+                                "& .header-cell": {
+                                    // backgroundColor: 'purple',
+                                    p: 1.5,
+                                    fontSize: "1rem",
+                                    color: "#E7F6F2",
+                                    fontWeight: "bold",
+                                },
+                                "& .MuiDataGrid-sortIcon": {
+                                    color: "#E7F6F2", // Sort arrow color
+                                },
+                                "& .MuiDataGrid-menuIcon": {
+                                    color: "#E7F6F2", // Column menu icon color
+                                },
+                                "& .MuiDataGrid-menuIconButton": {
+                                    color: "#E7F6F2", // Color of the menu button when clicked
+                                },
+                                "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-checkboxInput svg":{
+                                    color: "#E7F6F2", // Header checkbox color
+                                }
+                            }}
                         />
                     </Paper>
                 </Box>
-            </Box>
+            </Container>
+            <CourseTable courses={courses} setCourses={setCourses} />
+
         </Box>
     )
 }

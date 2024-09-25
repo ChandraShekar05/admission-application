@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react"
+import { Fragment } from "react"
 import {
     Button,
     Dialog,
@@ -17,16 +17,19 @@ const AlertDialog = ({ open, deleteCourse, handleDelete, handleClose }) => {
     return (
         <Fragment>
             <Dialog
-                sx={{ width: "100%" }}
+                 PaperProps={{
+                    sx: { borderRadius: 5, p: 2 },
+                 }}
+                 
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle sx={{p:1}} id="alert-dialog-title">
                     {`Delete Course? ${deleteCourse.name}`}
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{p:1}}>
                     <Alert severity="warning">
                         This action cannot be undone
                     </Alert>
@@ -36,7 +39,7 @@ const AlertDialog = ({ open, deleteCourse, handleDelete, handleClose }) => {
                         Cancel
                     </Button>
                     <Button
-                        variant="outlined"
+                        variant="contained"
                         color="error"
                         onClick={handleAgrre}
                     >
