@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from './pages/User';
-import Admin from './pages/admin';
+import Admin from './pages/Admin';
 import CoursesPage from './pages/coursesPage';
 import ApplicantData from './components/admin/ApplicantData';
 
