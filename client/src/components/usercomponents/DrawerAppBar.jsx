@@ -97,29 +97,46 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button
-                key={item}
-                sx={{
+              key={item}
+              sx={{
+                color: '#ffffff',
+                fontSize: "14px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                px:1,
+                py:2,
+
+                mr:1,
+                position: 'relative',
+                opacity: 0.75,
+                transition: 'opacity 0.3s, background-color 0.3s',
+                '&:hover': {
+                  opacity: 1,
                   color: '#ffffff',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  mx: 1.5,
-                  borderRadius: '20px',
-                  padding: '10px 20px',
-                  transition: 'background-color 0.3s',
-                  '&:hover': {
-                    backgroundColor: '#D6E4E5',
-                    color: '#2C3333',
+                  '&::before': {
+                    width: '100%', // full width on hover
                   },
-                }}
-                onClick={() => {
-                  if (item === 'Courses' && scrollToCourses) scrollToCourses();
-                  else if (item === 'Contact' && scrollToContact) scrollToContact();
-                  else if (item === 'Home' && scrollToHome) scrollToHome();
-                  else if (item === 'About' && scrollToAbout) scrollToAbout();
-                }}
-              >
-                {item}
-              </Button>
+                },
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: '10px',
+                  left: '0',
+                  height: '5px',
+                  width: '0%',
+                  backgroundColor: '#ffffff',
+                  transition: 'width 0.3s',
+                },
+              }}
+              onClick={() => {
+                if (item === 'Courses' && scrollToCourses) scrollToCourses();
+                else if (item === 'Contact' && scrollToContact) scrollToContact();
+                else if (item === 'Home' && scrollToHome) scrollToHome();
+                else if (item === 'About' && scrollToAbout) scrollToAbout();
+              }}
+            >
+              {item}
+            </Button>
             ))}
           </Box>
         </Toolbar>

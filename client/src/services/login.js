@@ -9,7 +9,7 @@ const login =  (email,password) => {
 
 const logout =  () => {
 
-    const response = axios.post(`${url}/logout`,{ withCredentials: true })
+    const response = axios.post(`${url}/logout`,{},{ withCredentials: true })
     return response.then(response => response.data)
 
 }
