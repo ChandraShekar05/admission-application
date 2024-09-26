@@ -258,6 +258,7 @@ const Admin = () => {
                     </Paper>
                 </Box>
             </Container>
+            <CourseTable courses={courses} setCourses={setCourses} />
 
         </Box>
     )
