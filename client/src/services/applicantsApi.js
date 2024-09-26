@@ -4,7 +4,9 @@ const url = 'http://localhost:3001/api/applications';
 
 export const getApplicants = async () => {
     try {
-        const response = await axios.get(url);
+        const response = await axios.get(url,{
+            withCredentials: true // This ensures cookies are sent
+          });
         return response.data;
     } catch (error) {
         console.error('Error fetching applicants:', error);
@@ -14,7 +16,9 @@ export const getApplicants = async () => {
 
 export const getApplicantById = async (id) => {
     try {
-        const response = await axios.get(`${url}/${id}`);
+        const response = await axios.get(`${url}/${id}`,{
+            withCredentials: true // This ensures cookies are sent
+          });
         return response.data;
     } catch (error) {
         console.error('Error fetching applicant:', error);
@@ -24,7 +28,9 @@ export const getApplicantById = async (id) => {
 
 export const updateApplicantStatus = async (id, status) => {
     try {
-        const response = await axios.put(`${url}/${id}`, { status });
+        const response = await axios.put(`${url}/${id}`, { status },{
+            withCredentials: true // This ensures cookies are sent
+          });
         return response.data;
     } catch (error) {
         console.error('Error updating applicant status:', error);

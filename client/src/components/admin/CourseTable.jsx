@@ -72,15 +72,9 @@ const CourseTable = ({ courses, setCourses }) => {
         } else if (openForm) {
             setOpenForm(false) // Close the dialog'=
             setEditCourse(false)
-            // setSelectedCourse({})
+            setSelectedCourse({})
         }
     }
-
-    // useEffect(() => {
-    //     getAllCourses()
-    //         .then((data) => setCourses(data))
-    //         .catch((error) => console.error("Error Fetchingn users:", error))
-    // }, [])
 
     return (
         <Box sx={{ background: "#E7F6F2", py: 5 }}>

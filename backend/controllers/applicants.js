@@ -1,7 +1,9 @@
 const applicantRouter = require("express").Router()
 const Blog = require("../models/applicantSchema")
 
-applicantRouter.get("/", async (request, response) => {
+const { adminAuthentication } = require ("../utils/middleware")
+
+applicantRouter.get("/",adminAuthentication, async (request, response) => {
     const blogs = await Blog.find({})
         .populate("preferredCourse.course", {
             name: 1,
@@ -10,7 +12,7 @@ applicantRouter.get("/", async (request, response) => {
     response.json(blogs)
 })
 
-applicantRouter.get("/:id", async (request, response, next) => {
+applicantRouter.get("/:id", adminAuthentication,async (request, response, next) => {
     const id = request.params.id
     try {
         const blog = await Blog.findById(id).populate(
@@ -56,15 +58,15 @@ applicantRouter.delete("/:id", async (request, response, next) => {
     }
 })
 
-applicantRouter.put("/:id", async (req, res, next) => {
+applicantRouter.put("/:id", adminAuthentication,async (req, res, next) => {
     const id = req.params.id
     const { status } = req.body
+    const lastUpdatedBy = req.admin.name
 
     try {
-        console.log("Status:", status)
         const applicant = await Blog.findByIdAndUpdate(
             id,
-            { status },
+            { status,lastUpdatedBy },
             { new: true, runValidators: true }
         )
         if (!applicant) {
