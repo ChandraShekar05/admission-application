@@ -7,21 +7,22 @@ import {
     IconButton,
     Alert,
     Container,
-    Select,
-    MenuItem,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import Chip from "@mui/material/Chip"
 // import Navbar from "../components/admin/Navbar"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import { Link } from "react-router-dom"
-import { getApplicants, updateApplicantStatus } from "../services/applicantsApi"
+import { getApplicants } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
+import { getAllCourses } from "../services/coursesApi"
+
+import CourseTable from "../components/admin/CourseTable"
 
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
     const [selectedApplicants, setSelectedApplicants] = useState([])
-    const [statusChanges, setStatusChanges] = useState({})
+    const [courses, setCourses] = useState([])
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const paginationModel = { page: 0, pageSize: 5 }
 
@@ -33,6 +34,12 @@ const Admin = () => {
             .catch((error) =>
                 console.error("Error fetching applicants:", error)
             )
+
+        getAllCourses()
+            .then((courses) => {
+                setCourses(courses)
+            })
+            .catch((error) => console.error("Error fetching courses:", error))
     }, [])
 
     const getStatusColor = (status) => {
@@ -51,30 +58,6 @@ const Admin = () => {
         }
     }
 
-    const handleStatusChange = (id, newStatus) => {
-        setStatusChanges((prev) => ({ ...prev, [id]: newStatus }))
-    }
-
-    const handleUpdateStatus = async (id) => {
-        const newStatus = statusChanges[id]
-        if (newStatus) {
-            try {
-                await updateApplicantStatus(id, newStatus)
-                setApplicants((prev) =>
-                    prev.map((applicant) =>
-                        applicant.id === id
-                            ? { ...applicant, status: newStatus }
-                            : applicant
-                    )
-                )
-            } catch (error) {
-                console.error("Error updating status:", error)
-                alert("Failed to update status")
-            }
-        }
-    }
-
-
     const handleSendMail = async () => {
         try {
             const emails = selectedApplicants.map((id) => {
@@ -89,8 +72,6 @@ const Admin = () => {
             })
             await sendMail(emails)
             setShowSuccessAlert(true)
-            setTimeout(() => setShowSuccessAlert(false), 3000)
-            setSelectedApplicants([])
         } catch (error) {
             console.error("Error sending emails:", error)
             alert("Failed to send emails")
@@ -139,37 +120,11 @@ const Admin = () => {
             fontWeight: "bold",
             headerClassName: "header-cell",
             renderCell: (params) => (
-                <Select
-                    value={statusChanges[params.row.id] || params.value}
-                    onChange={(e) =>
-                        handleStatusChange(params.row.id, e.target.value)
-                    }
-                    fullWidth
-                    sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'center', 
-                        border: 'none', 
-                        my: '10px',
-                        '& .MuiSelect-select': { padding: '0' },
-                        '& .MuiOutlinedInput-notchedOutline': { border: 'none' } }}
-                    
-                >
-                    <MenuItem value="Open" >
-                        <Chip label="Open" color="primary" sx={{ margin: 'auto', width: '15ch' }} />
-                    </MenuItem>
-                    <MenuItem value="Followup">
-                        <Chip label="Followup" color="warning" sx={{ margin: 'auto', width: '15ch' }} />
-                    </MenuItem>
-                    <MenuItem value="Mail Sent">
-                        <Chip label="Mail Sent" color="warning" sx={{ margin: 'auto', width: '15ch' }} />
-                    </MenuItem>
-                    <MenuItem value="Accepted">
-                        <Chip label="Accepted" color="success" sx={{ margin: 'auto', width: '15ch' }} />
-                    </MenuItem>
-                    <MenuItem value="Rejected">
-                        <Chip label="Rejected" color="error" sx={{ my: 'auto', width: '15ch' }} />
-                    </MenuItem>
-                </Select>
+                <Chip
+                    label={params.value}
+                    sx={{ width: "15ch", fontWeight: "bold" }}
+                    color={getStatusColor(params.value)}
+                />
             ),
         },
         {
@@ -179,30 +134,6 @@ const Admin = () => {
             resizable: false,
             fontWeight: "bold",
             headerClassName: "header-cell",
-        },
-        {
-            field: "action",
-            headerName: "Action",
-            width: 150,
-            resizable: false,
-            fontWeight: "bold",
-            sortable: false, // Disables sorting
-            filterable: false, // Disables filtering
-            disableColumnMenu: true, // Disables column menu (three dots)
-            hideSortIcons: true,
-            headerClassName: "header-cell",
-            renderCell: (params) => (
-                <Button
-                    variant="outlined"
-                    sx={{backgroundColor: "#2c3333",fontWeight: 'bold', color: "white"}}
-                    onClick={(event) => {
-                        event.stopPropagation()
-                        handleUpdateStatus(params.row.id)
-                    }}
-                >
-                    Update
-                </Button>
-            ),
         },
         {
             field: "view",
@@ -260,14 +191,6 @@ const Admin = () => {
                         <Button
                             variant="contained"
                             color="secondary"
-                            sx={
-                                { 
-                                    mb: 3,
-                                    fontWeight: 'bold',
-                                    width: 'fit-content', 
-
-                                }
-                            }
                             onClick={handleSendMail}
                         >
                             send mail
@@ -303,7 +226,7 @@ const Admin = () => {
                             onRowSelectionModelChange={(
                                 newRowSelectionModel
                             ) => {
-                                // console.log(newRowSelectionModel)
+                                console.log(newRowSelectionModel)
                                 setSelectedApplicants(newRowSelectionModel)
                             }}
                             sx={{
