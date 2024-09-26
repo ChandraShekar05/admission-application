@@ -63,6 +63,7 @@ const Admin = () => {
                 setApplicants((prev) =>
                     prev.map((applicant) =>
                         applicant.id === id ? response : applicant
+
                     )
                 )
             } catch (error) {
