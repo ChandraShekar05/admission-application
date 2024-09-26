@@ -1,4 +1,6 @@
 const courseRouter = require("express").Router()
+const { adminAuthentication } = require ("../utils/middleware")
+
 
 const Courses = require("../models/courses")
 
@@ -7,7 +9,7 @@ courseRouter.get("/", async (req, res) => {
     res.json(courses)
 })
 
-courseRouter.post("/", async (req, res, next) => {
+courseRouter.post("/",adminAuthentication, async (req, res, next) => {
     try {
         const newCourse = new Courses(req.body)
         const result = await newCourse.save()
@@ -17,7 +19,7 @@ courseRouter.post("/", async (req, res, next) => {
     }
 })
 
-courseRouter.put("/:id", async (req, res, next) => {
+courseRouter.put("/:id",adminAuthentication, async (req, res, next) => {
     const eidtId = req.params.id
     const updateBody = req.body
     try {
@@ -35,7 +37,7 @@ courseRouter.put("/:id", async (req, res, next) => {
     }
 })
 
-courseRouter.delete("/:id", async (req, res, next) => {
+courseRouter.delete("/:id",adminAuthentication, async (req, res, next) => {
     const deleteId = req.params.id
     try {
         const deletetedCourse = await Courses.findByIdAndDelete(deleteId)

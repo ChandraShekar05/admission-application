@@ -15,14 +15,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import { Link } from "react-router-dom"
 import { getApplicants } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
-import { getAllCourses } from "../services/coursesApi"
 
-import CourseTable from "../components/admin/CourseTable"
 
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
     const [selectedApplicants, setSelectedApplicants] = useState([])
-    const [courses, setCourses] = useState([])
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const paginationModel = { page: 0, pageSize: 5 }
 
@@ -34,12 +31,6 @@ const Admin = () => {
             .catch((error) =>
                 console.error("Error fetching applicants:", error)
             )
-
-        getAllCourses()
-            .then((courses) => {
-                setCourses(courses)
-            })
-            .catch((error) => console.error("Error fetching courses:", error))
     }, [])
 
     const getStatusColor = (status) => {
@@ -258,7 +249,6 @@ const Admin = () => {
                     </Paper>
                 </Box>
             </Container>
-            <CourseTable courses={courses} setCourses={setCourses} />
 
         </Box>
     )

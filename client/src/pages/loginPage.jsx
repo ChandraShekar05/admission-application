@@ -1,8 +1,12 @@
 import { Container, TextField, Paper, Button } from "@mui/material"
 import { useState } from "react"
 import { login } from "../services/login"
+import {useNavigate } from 'react-router-dom'
+
 
 const LoginPage = () => {
+    const navigate = useNavigate()
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState("")
 
@@ -14,6 +18,10 @@ const LoginPage = () => {
                 if(data.success)
                 {
                     console.log(data.message)
+                    setPassword('')
+                    setEmail('')
+                    navigate('/admin')
+                    
                 }
             })
             .catch(error => console.log(error))
@@ -21,7 +29,7 @@ const LoginPage = () => {
     }
 
     return (
-        <Container sx={{my:5,display:'flex',flexDirection:'row'}}>
+        <Container sx={{ height:'100vh',my:5,display:'flex',justifyContent:'center'}}>
             <Paper  sx={{my:5,display:'flex',flexDirection:'column'}} >
                 <form onSubmit={handleSubmit}>
                 <TextField

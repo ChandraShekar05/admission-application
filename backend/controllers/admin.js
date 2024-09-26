@@ -28,7 +28,6 @@ adminRouter.post("/", async (req, res, next) => {
 
 adminRouter.post("/login", async (req, res) => {
     const { email, password } = req.body
-    console.log(email,password)
     const admin = await Admin.findOne({ email })
     const passwordMatch =
         admin === null ? false : bcrypt.compare(password, admin.password)
@@ -57,8 +56,12 @@ adminRouter.post("/login", async (req, res) => {
     res.status(200).json({
         success: true,
         message: "Login Succesful",
-        token
     })
+})
+
+adminRouter.post("/logout", (req, res) => {
+    res.clearCookie("token", { path: '/' })
+    res.status(200).json({ success: true, message: "Logout successful" })
 })
 
 module.exports = adminRouter
