@@ -30,7 +30,7 @@ const errorHandler = (error, req, res, next) => {
 
 const adminAuthentication = (req, res, next) => {
     try {
-        const token = req.cookies.token
+        const token = req.cookies.adminAuth
         if (!token) {
             return res
                 .status(401)
@@ -38,6 +38,14 @@ const adminAuthentication = (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, config.JWT_SECRET)
+        if(decoded.role!=='admin')
+        {
+
+            return res
+                .status(401)
+                .json({ message: "Unauthorized: No Access" })
+
+        }
 
         req.admin = decoded
 

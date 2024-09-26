@@ -62,9 +62,8 @@ const Admin = () => {
                 const response = await updateApplicantStatus(id, newStatus)
                 setApplicants((prev) =>
                     prev.map((applicant) =>
-                        applicant.id === id
-                            ? { ...applicant, status: newStatus, lastUpdatedBy: response.lastUpdatedBy }
-                            : applicant
+                        applicant.id === id ? response : applicant
+
                     )
                 )
             } catch (error) {
@@ -73,7 +72,6 @@ const Admin = () => {
             }
         }
     }
-
 
     const handleSendMail = async () => {
         try {
@@ -145,29 +143,51 @@ const Admin = () => {
                         handleStatusChange(params.row.id, e.target.value)
                     }
                     fullWidth
-                    sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'center', 
-                        border: 'none', 
-                        my: '10px',
-                        '& .MuiSelect-select': { padding: '0' },
-                        '& .MuiOutlinedInput-notchedOutline': { border: 'none' } }}
-                    
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        border: "none",
+                        my: "10px",
+                        "& .MuiSelect-select": { padding: "0" },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            border: "none",
+                        },
+                    }}
                 >
-                    <MenuItem value="Open" >
-                        <Chip label="Open" color="primary" sx={{ margin: 'auto', width: '15ch' }} />
+                    <MenuItem value="Open">
+                        <Chip
+                            label="Open"
+                            color="primary"
+                            sx={{ margin: "auto", width: "15ch" }}
+                        />
                     </MenuItem>
                     <MenuItem value="Followup">
-                        <Chip label="Followup" color="warning" sx={{ margin: 'auto', width: '15ch' }} />
+                        <Chip
+                            label="Followup"
+                            color="warning"
+                            sx={{ margin: "auto", width: "15ch" }}
+                        />
                     </MenuItem>
                     <MenuItem value="Mail Sent">
-                        <Chip label="Mail Sent" color="warning" sx={{ margin: 'auto', width: '15ch' }} />
+                        <Chip
+                            label="Mail Sent"
+                            color="warning"
+                            sx={{ margin: "auto", width: "15ch" }}
+                        />
                     </MenuItem>
                     <MenuItem value="Accepted">
-                        <Chip label="Accepted" color="success" sx={{ margin: 'auto', width: '15ch' }} />
+                        <Chip
+                            label="Accepted"
+                            color="success"
+                            sx={{ margin: "auto", width: "15ch" }}
+                        />
                     </MenuItem>
                     <MenuItem value="Rejected">
-                        <Chip label="Rejected" color="error" sx={{ my: 'auto', width: '15ch' }} />
+                        <Chip
+                            label="Rejected"
+                            color="error"
+                            sx={{ my: "auto", width: "15ch" }}
+                        />
                     </MenuItem>
                 </Select>
             ),
@@ -193,8 +213,17 @@ const Admin = () => {
             headerClassName: "header-cell",
             renderCell: (params) => (
                 <Button
-                    variant="outlined"
-                    sx={{backgroundColor: "#2c3333",fontWeight: 'bold', color: "white"}}
+                    variant="contained"
+                    sx={{
+                        fontWeight: "bold",
+                        textTransform: "capitalize",
+                        background: "#2c3333",
+                        transition: "0.3s",
+                        "&:hover": {
+                            transform: "scale(1.02)",
+                            boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+                        },
+                    }}
                     onClick={(event) => {
                         event.stopPropagation()
                         handleUpdateStatus(params.row.id)
@@ -260,14 +289,11 @@ const Admin = () => {
                         <Button
                             variant="contained"
                             color="secondary"
-                            sx={
-                                { 
-                                    mb: 3,
-                                    fontWeight: 'bold',
-                                    width: 'fit-content', 
-
-                                }
-                            }
+                            sx={{
+                                mb: 3,
+                                fontWeight: "bold",
+                                width: "fit-content",
+                            }}
                             onClick={handleSendMail}
                         >
                             send mail
@@ -327,15 +353,15 @@ const Admin = () => {
                                 "& .MuiDataGrid-menuIconButton": {
                                     color: "#E7F6F2", // Color of the menu button when clicked
                                 },
-                                "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-checkboxInput svg":{
-                                    color: "#E7F6F2", // Header checkbox color
-                                }
+                                "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-checkboxInput svg":
+                                    {
+                                        color: "#E7F6F2", // Header checkbox color
+                                    },
                             }}
                         />
                     </Paper>
                 </Box>
             </Container>
-
         </Box>
     )
 }
