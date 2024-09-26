@@ -40,6 +40,7 @@ const adminAuthentication = (req, res, next) => {
         const decoded = jwt.verify(token, config.JWT_SECRET)
         if(decoded.role!=='admin')
         {
+
             return res
                 .status(401)
                 .json({ message: "Unauthorized: No Access" })

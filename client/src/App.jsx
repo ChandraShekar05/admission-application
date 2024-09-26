@@ -5,13 +5,15 @@ import CoursesPage from "./pages/coursesPage"
 import ApplicantData from "./components/admin/ApplicantData"
 import AdminNavbar from "./pages/AdminNavbar"
 import LoginPage from "./pages/LoginPage"
+
+import ProtectedRoute from "./components/admin/ProtectedRoute"
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<User />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/admin" element={<AdminNavbar/>}>
+                <Route path="/admin" element={<ProtectedRoute><AdminNavbar/></ProtectedRoute>}>
                     <Route index element={<Admin />} />
                     <Route path="applicants/:id" element={<ApplicantData />} />
                     <Route path="courses" element={<CoursesPage />} />

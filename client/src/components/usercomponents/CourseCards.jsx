@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Card, CardContent, Typography, Button, Divider, CardActions, CardHeader } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';

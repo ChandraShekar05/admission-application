@@ -13,7 +13,13 @@ const logout =  () => {
     return response.then(response => response.data)
 
 }
+
+const tokenValidation = () => {
+    const response = axios.post(`${url}/validateToken`,{},{ withCredentials: true })
+    return response.then(response => response.data)
+}
 export {
    login,
-   logout
+   logout,
+   tokenValidation
 }

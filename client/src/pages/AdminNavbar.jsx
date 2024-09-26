@@ -143,13 +143,15 @@ function AdminNavbar() {
                                         fontWeight: "600",
                                         mr: 1,
                                         borderRadius: "20px",
-                                        // padding: "10px 20px",
+                                        opacity: 0.75,
                                         p:1,
-                                        transition: "background-color 0.3s",
-                                        // '&:hover': {
-                                        //   backgroundColor: '#D6E4E5',
-                                        //   color: '#2C3333',
-                                        // },
+                                        transition: 'opacity 0.3s',
+                                        '&:hover': {
+                                            opacity:1
+                                        },
+                                        '&:active':{
+                                            opacity:1
+                                        }
                                     }}
                                 >
                                     {item}
@@ -159,7 +161,14 @@ function AdminNavbar() {
                                 variant="outlined"
                                 color="white"
                                 onClick={handleLogut}
-                                sx={{fontSize:'14px',ml:1}}
+                                sx={{fontSize:'14px',ml:1,
+                                    transition: 'background 0.3s, color 0.5s',
+
+                                    '&:hover': {
+                                            background:'white',
+                                            color:'black'
+                                        },
+                                }}
                             >
                                 LogOut
                             </Button>

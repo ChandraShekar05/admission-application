@@ -33,7 +33,8 @@ adminRouter.post("/login", async (req, res) => {
     const { email, password } = req.body
     const admin = await Admin.findOne({ email })
     const passwordMatch =
-        admin === null ? false : bcrypt.compare(password, admin.password)
+        admin === null ? false : await bcrypt.compare(password, admin.password)
+
 
     if (!(admin && passwordMatch)) {
         return res.status(401).json({
@@ -64,14 +65,12 @@ adminRouter.post("/login", async (req, res) => {
 })
 
 adminRouter.post("/logout", (req, res) => {
-    console.log("adminAuth cookies does exist")
     res.clearCookie("adminAuth", { path: "/", httpOnly: true, secure: false })
     res.status(200).json({ success: true, message: "Logout successful" })
 
     // res.clearCookie('adminAuth', { secure: false, httpOnly: false, path: '/' })
 })
 adminRouter.post("/validateToken",adminAuthentication, (req, res) => {
-    console.log("adminAuth cookies does exist")
     res.status(200).json({ success: true, message: "Valid Token" })
     // res.clearCookie('adminAuth', { secure: false, httpOnly: false, path: '/' })
 })
