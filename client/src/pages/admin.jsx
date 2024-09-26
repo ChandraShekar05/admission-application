@@ -59,11 +59,11 @@ const Admin = () => {
         const newStatus = statusChanges[id]
         if (newStatus) {
             try {
-                await updateApplicantStatus(id, newStatus)
+                const response = await updateApplicantStatus(id, newStatus)
                 setApplicants((prev) =>
                     prev.map((applicant) =>
                         applicant.id === id
-                            ? { ...applicant, status: newStatus }
+                            ? { ...applicant, status: newStatus, lastUpdatedBy: response.lastUpdatedBy }
                             : applicant
                     )
                 )
