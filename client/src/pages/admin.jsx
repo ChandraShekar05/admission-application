@@ -17,6 +17,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import { Link } from "react-router-dom"
 import { getApplicants, updateApplicantStatus } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
@@ -117,18 +119,43 @@ const Admin = () => {
         {
             field: "email",
             headerName: "Email",
-            width: 200,
+            width: 250,
             resizable: false,
             fontWeight: "bold",
             headerClassName: "header-cell",
+            renderCell: (params) => (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Typography sx={{ fontSize: 'small'}}>{params.value}</Typography>
+                    <IconButton
+                        onClick={() => navigator.clipboard.writeText(params.value)}
+                        sx={{ ml: 1 }}
+                    >
+                        <ContentCopyIcon sx={{fontSize: 'medium'}} />
+                    </IconButton>
+                </Box>
+            ),
         },
         {
             field: "phoneNumber",
             headerName: "Phone Number",
-            width: 150,
+            width: 200,
             resizable: false,
             fontWeight: "bold",
             headerClassName: "header-cell",
+            renderCell: (params) => (
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <Typography sx={{ fontSize: 'small'}}>{params.value}</Typography>
+                    <IconButton
+                        component="a"
+                        href={`https://wa.me/${params.value}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{ ml: 1, fontSize: 'small' }}
+                    >
+                        <WhatsAppIcon sx={{fontSize: 'medium'}} color="success" />
+                    </IconButton>
+                </Box>
+            ),
         },
         {
             field: "course",
@@ -238,7 +265,7 @@ const Admin = () => {
     })
 
     return (
-        <Box>
+        <Box >
             <Container sx={{ justifyItems: "center" }}>
                 <Snackbar
                     open={showSuccessAlert}
@@ -252,11 +279,13 @@ const Admin = () => {
                 </Snackbar>
                 <Box
                     id="applications"
+                    className="send-mail-container"
                     sx={{
                         my: 4,
                         p: 0,
                         display: "flex",
                         flexDirection: "column",
+                        
                     }}
                 >
                     <Typography variant="h3" color="#2C3333" sx={{ mb: 3 }}>

@@ -6,6 +6,7 @@ import ApplicantData from "./components/admin/ApplicantData"
 import AdminNavbar from "./pages/AdminNavbar"
 import LoginPage from "./pages/LoginPage"
 
+
 import ProtectedRoute from "./components/admin/ProtectedRoute"
 function App() {
     return (
