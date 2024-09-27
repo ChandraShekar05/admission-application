@@ -1,0 +1,39 @@
+body {
+    --sb-track-color: #e7f6f2;
+    --sb-thumb-color: #a5c9ca;
+    --sb-size: 6px;
+    
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body::-webkit-scrollbar {
+    width: var(--sb-size)
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 24px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 24px;
+    
+  }
+
+
+.MuiDataGrid-root {
+    transition: all 0.5s ease-in-out;
+}
+.send-mail-container {
+    transition: all 0.5s ease-in-out;
+}
+  
+  @supports not selector(::-webkit-scrollbar) {
+    body {
+      scrollbar-color: var(--sb-thumb-color)
+                       var(--sb-track-color);
+    }
+  }

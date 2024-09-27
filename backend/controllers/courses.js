@@ -1,7 +1,6 @@
 const courseRouter = require("express").Router()
 const { adminAuthentication } = require ("../utils/middleware")
 
-
 const Courses = require("../models/courses")
 
 courseRouter.get("/", async (req, res) => {
@@ -50,4 +49,3 @@ courseRouter.delete("/:id",adminAuthentication, async (req, res, next) => {
     }
 })
 
-module.exports = courseRouter
