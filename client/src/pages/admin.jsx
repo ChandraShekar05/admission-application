@@ -5,14 +5,14 @@ import {
     Button,
     Paper,
     IconButton,
+    Snackbar,
     Alert,
     Container,
     Select,
     MenuItem,
+    Chip,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
-import Chip from "@mui/material/Chip"
-// import Navbar from "../components/admin/Navbar"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import { Link } from "react-router-dom"
 import { getApplicants, updateApplicantStatus } from "../services/applicantsApi"
@@ -34,22 +34,6 @@ const Admin = () => {
                 console.error("Error fetching applicants:", error)
             )
     }, [])
-
-    const getStatusColor = (status) => {
-        switch (status.toLowerCase()) {
-            case "open":
-                return "primary"
-            case "followup":
-            case "mail sent":
-                return "warning"
-            case "accepted":
-                return "success"
-            case "rejected":
-                return "error"
-            default:
-                return "default"
-        }
-    }
 
     const handleStatusChange = (id, newStatus) => {
         setStatusChanges((prev) => ({ ...prev, [id]: newStatus }))
@@ -92,6 +76,32 @@ const Admin = () => {
         } catch (error) {
             console.error("Error sending emails:", error)
             alert("Failed to send emails")
+        }
+    }
+
+    const commonStyles = {
+        display: "flex",
+        justifyContent: "center",
+        border: "none",
+        my: "10px",
+        "& .MuiSelect-select": { padding: "0" },
+        "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+    };
+
+    const getStatusColor = (status) => {   
+        switch (status) {
+            case "Open":
+                return "primary"
+            case "Followup":
+                return "warning"
+            case "Mail Sent":
+                return "warning"
+            case "Accepted":
+                return "success"
+            case "Rejected":
+                return "error"
+            default:
+                return "default"
         }
     }
 
@@ -143,52 +153,13 @@ const Admin = () => {
                         handleStatusChange(params.row.id, e.target.value)
                     }
                     fullWidth
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        border: "none",
-                        my: "10px",
-                        "& .MuiSelect-select": { padding: "0" },
-                        "& .MuiOutlinedInput-notchedOutline": {
-                            border: "none",
-                        },
-                    }}
+                    sx={commonStyles}
                 >
-                    <MenuItem value="Open">
-                        <Chip
-                            label="Open"
-                            color="primary"
-                            sx={{ margin: "auto", width: "15ch" }}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Followup">
-                        <Chip
-                            label="Followup"
-                            color="warning"
-                            sx={{ margin: "auto", width: "15ch" }}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Mail Sent">
-                        <Chip
-                            label="Mail Sent"
-                            color="warning"
-                            sx={{ margin: "auto", width: "15ch" }}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Accepted">
-                        <Chip
-                            label="Accepted"
-                            color="success"
-                            sx={{ margin: "auto", width: "15ch" }}
-                        />
-                    </MenuItem>
-                    <MenuItem value="Rejected">
-                        <Chip
-                            label="Rejected"
-                            color="error"
-                            sx={{ my: "auto", width: "15ch" }}
-                        />
-                    </MenuItem>
+                    {["Open", "Followup", "Mail Sent", "Accepted", "Rejected"].map((status) => (
+                        <MenuItem key={status} value={status}>
+                            <Chip label={status} color={getStatusColor(status)} sx={{ margin: "auto", width: "15ch" }} />
+                        </MenuItem>
+                    ))}
                 </Select>
             ),
         },
@@ -203,7 +174,7 @@ const Admin = () => {
         {
             field: "action",
             headerName: "Action",
-            width: 150,
+            width: 120,
             resizable: false,
             fontWeight: "bold",
             sortable: false, // Disables sorting
@@ -268,11 +239,17 @@ const Admin = () => {
 
     return (
         <Box>
-            {/* <Navbar /> */}
             <Container sx={{ justifyItems: "center" }}>
-                {showSuccessAlert && (
-                    <Alert severity="success">Mail sent successfully.</Alert>
-                )}
+                <Snackbar
+                    open={showSuccessAlert}
+                    autoHideDuration={3000}
+                    onClose={() => setShowSuccessAlert(false)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert onClose={() => setShowSuccessAlert(false)} severity="success" sx={{ width: '300px' }}>
+                        Mail sent successfully.
+                    </Alert>
+                </Snackbar>
                 <Box
                     id="applications"
                     sx={{
@@ -288,11 +265,13 @@ const Admin = () => {
                     {selectedApplicants.length > 0 && (
                         <Button
                             variant="contained"
-                            color="secondary"
+                            color="#2c3333"
                             sx={{
                                 mb: 3,
                                 fontWeight: "bold",
                                 width: "fit-content",
+                                opacity: selectedApplicants.length > 0 ? 1 : 0,
+                                transition: "opacity 0.5s ease-in-out",
                             }}
                             onClick={handleSendMail}
                         >
