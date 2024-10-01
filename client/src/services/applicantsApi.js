@@ -26,9 +26,14 @@ export const getApplicantById = async (id) => {
     }
 };
 
-export const updateApplicantStatus = async (id, status) => {
+export const updateApplicantStatus = async (id, status, remarks, adminName) => {
+    if(!remarks)
+    {
+        remarks=status;
+    }
+    let newRemark = `${remarks}`;
     try {
-        const response = await axios.put(`${url}/${id}`, { status },{
+        const response = await axios.put(`${url}/${id}`, { status, lastUpdatedBy: adminName, remarks: newRemark },{
             withCredentials: true // This ensures cookies are sent
           });
         return response.data;

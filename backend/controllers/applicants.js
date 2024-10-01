@@ -64,13 +64,28 @@ applicantRouter.delete("/:id", async (request, response, next) => {
 
 applicantRouter.put("/:id", adminAuthentication, async (req, res, next) => {
     const id = req.params.id
-    const { status } = req.body
+    let { status, remarks } = req.body
+    if(!remarks)
+    {
+        remarks="No remarks"
+    }
     const lastUpdatedBy = req.admin.name
+    const date = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Kolkata",
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZoneName: 'short',
+    })
+    const newRemark = `${remarks} - ${lastUpdatedBy} - ${date}`
 
     try {
         const applicant = await Blog.findByIdAndUpdate(
             id,
-            { status, lastUpdatedBy },
+            { status, lastUpdatedBy, $push: { remarks: newRemark } },
             { new: true, runValidators: true }
         ).populate("preferredCourse.course", {
             name: 1,

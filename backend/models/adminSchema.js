@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-
 const adminSchema = new mongoose.Schema(
     {
         name: {
@@ -10,7 +9,6 @@ const adminSchema = new mongoose.Schema(
         email: {
             type: String,
             required: [true, "Email is required"],
-            // eslint-disable-next-line no-useless-escape
             match: [/.+\@.+\..+/, "Please enter a valid email address"],
             unique: true,
             lowercase: true,
@@ -22,14 +20,20 @@ const adminSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            default: "AdminCounceller",
+            enum: ["Admin", "AdminCounceller"],
+            default: "Admin",
         },
+        adminCounceller: [
+            {
+                type: [mongoose.Schema.Types.ObjectId],
+                ref: "Admin", 
+            },
+        ],
     },
     {
         timestamps: true,
     }
 )
-
 adminSchema.set("toJSON", {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
@@ -40,6 +44,4 @@ adminSchema.set("toJSON", {
     },
 })
 
-module.exports = mongoose.model("Admin", adminSchema)
-
-
+module.exports = mongoose.model("SuperAdmin", adminSchema)

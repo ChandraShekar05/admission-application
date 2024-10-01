@@ -28,6 +28,25 @@ const errorHandler = (error, req, res, next) => {
     next(error)
 }
 
+const superAdminAuthentication = (req, res, next) => {
+    const token = req.cookies.superAdminAuth;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const decodedToken = jwt.verify(token, config.JWT_SECRET);
+        if (decodedToken.role !== 'Admin') {
+            return res.status(403).json({ error: 'Forbidden: Access is denied' });
+        }
+        req.user = decodedToken;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+};
+
 const adminAuthentication = (req, res, next) => {
     try {
         const token = req.cookies.adminAuth
@@ -38,7 +57,7 @@ const adminAuthentication = (req, res, next) => {
         }
 
         const decoded = jwt.verify(token, config.JWT_SECRET)
-        if(decoded.role!=='admin')
+        if(decoded.role!=='AdminCounceller')
         {
 
             return res
@@ -57,5 +76,6 @@ const adminAuthentication = (req, res, next) => {
 module.exports = {
     unknownEndpoint,
     errorHandler,
+    superAdminAuthentication,
     adminAuthentication,
 }

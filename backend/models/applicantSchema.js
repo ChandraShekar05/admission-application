@@ -92,6 +92,11 @@ const applicantSchema = new mongoose.Schema(
             default: "Open",
             required: [true, "Status is required"],
         },
+        remarks: {
+            type: [String],
+            default: [],
+            required: [true, "Remarks is required"],
+        },
         lastUpdatedBy: {
             type: String,
             required: [true, "Last Updated by"],

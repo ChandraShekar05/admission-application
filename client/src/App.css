@@ -30,6 +30,9 @@ body {
 .send-mail-container {
     transition: all 0.5s ease-in-out;
 }
+.css-8nr3km-MuiButtonBase-root-MuiIconButton-root{
+  padding-bottom: 0;
+}
   
   @supports not selector(::-webkit-scrollbar) {
     body {
