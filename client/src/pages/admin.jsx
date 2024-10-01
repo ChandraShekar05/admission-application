@@ -11,6 +11,8 @@ import {
     Select,
     MenuItem,
     Chip,
+    Toolbar,
+    TextField,
 } from "@mui/material"
 import { DataGrid } from "@mui/x-data-grid"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
@@ -19,13 +21,16 @@ import { getApplicants, updateApplicantStatus } from "../services/applicantsApi"
 import { sendMail } from "../services/mailApi"
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Admin = () => {
     const [applicants, setApplicants] = useState([])
     const [selectedApplicants, setSelectedApplicants] = useState([])
     const [statusChanges, setStatusChanges] = useState({})
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
-    const paginationModel = { page: 0, pageSize: 5 }
+    const [filterStatus, setFilterStatus] = useState('')
+    const [filterText, setFilterText] = useState('')
+    const paginationModel = { page: 0, pageSize: 10 }
 
     useEffect(() => {
         getApplicants()
@@ -81,6 +86,11 @@ const Admin = () => {
         }
     }
 
+    const handleFilterChange = (event) => {
+        const selectedStatus = event.target.value
+        setFilterStatus(selectedStatus)
+    };
+
     const commonStyles = {
         display: "flex",
         justifyContent: "center",
@@ -124,7 +134,7 @@ const Admin = () => {
             fontWeight: "bold",
             headerClassName: "header-cell",
             renderCell: (params) => (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', my: '8px' }}>
                 <Typography sx={{ fontSize: 'small'}}>{params.value}</Typography>
                     <IconButton
                         onClick={() => navigator.clipboard.writeText(params.value)}
@@ -143,7 +153,7 @@ const Admin = () => {
             fontWeight: "bold",
             headerClassName: "header-cell",
             renderCell: (params) => (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', my: '8px' }}>
                     <Typography sx={{ fontSize: 'small'}}>{params.value}</Typography>
                     <IconButton
                         component="a"
@@ -191,12 +201,17 @@ const Admin = () => {
             ),
         },
         {
-            field: "lastUpdatedBy",
-            headerName: "Last Updated By",
+            field: "remarks",
+            headerName: "Remarks",
             width: 150,
             resizable: false,
             fontWeight: "bold",
             headerClassName: "header-cell",
+            renderCell: (params) => (
+                <Typography sx={{ fontSize: 'medium', my: 2 }}>
+                    {params.value.length > 0 ? params.value[params.value.length - 1] : "No remarks"}
+                </Typography>
+            ),
         },
         {
             field: "action",
@@ -252,17 +267,26 @@ const Admin = () => {
         },
     ]
 
-    const rows = applicants.map((applicant) => {
-        return {
-            id: applicant.id,
-            fullName: applicant.fullName,
-            email: applicant.contactInformation.emailAddress,
-            phoneNumber: applicant.contactInformation.phoneNumber,
-            course: applicant.preferredCourse.course.name,
-            status: applicant.status,
-            lastUpdatedBy: applicant.lastUpdatedBy,
-        }
-    })
+    const filteredRows = applicants
+        .filter((applicant) => {
+            const filterValue = filterText.toLowerCase();
+            const statusFilter = filterStatus.toLowerCase();
+            const statusMatches = statusFilter === "" || applicant.status.toLowerCase() === statusFilter;
+            const textMatches = applicant.status.toLowerCase().includes(filterValue);
+
+            return statusMatches && textMatches;
+        })
+        .map((applicant) => {
+            return {
+                id: applicant.id,
+                fullName: applicant.fullName,
+                email: applicant.contactInformation.emailAddress,
+                phoneNumber: applicant.contactInformation.phoneNumber,
+                course: applicant.preferredCourse.course.name,
+                status: applicant.status,
+                remarks: applicant.remarks,
+            }
+        })
 
     return (
         <Box >
@@ -288,25 +312,47 @@ const Admin = () => {
                         
                     }}
                 >
-                    <Typography variant="h3" color="#2C3333" sx={{ mb: 3 }}>
+                    <Typography variant="h3" color="#2C3333" sx={{ mb: 1 }}>
                         Applications Data
                     </Typography>
-                    {selectedApplicants.length > 0 && (
-                        <Button
-                            variant="contained"
-                            color="#2c3333"
+                    <Box sx={{ display: "flex", justifyContent: "space-between"}}>
+                        {selectedApplicants.length >= 0 && (
+                            <IconButton
+                            variant="rounded"
+                            color="#2C3333"
                             sx={{
+                                '& .MuiButtonBase-root' :{
+                                    padding: 0,
+                                },
                                 mb: 3,
                                 fontWeight: "bold",
-                                width: "fit-content",
                                 opacity: selectedApplicants.length > 0 ? 1 : 0,
                                 transition: "opacity 0.5s ease-in-out",
                             }}
                             onClick={handleSendMail}
                         >
-                            send mail
-                        </Button>
-                    )}
+                            <EmailIcon sx={{fontSize: 'xx-large'}}/>
+                        </IconButton>
+                        )}
+                        <Toolbar sx={{ justifyContent: "flex-end" }}>
+                            <Select
+                                label="Filter by Status"
+                                variant="outlined"
+                                value={filterStatus}
+                                onChange={handleFilterChange}
+                                size="small"
+                                displayEmpty
+                                sx={{ minWidth: 150 }}
+                            >
+                                <MenuItem value="">Filter By Status</MenuItem>
+                                <MenuItem value="Open">Open</MenuItem>
+                                <MenuItem value="Followup">Followup</MenuItem>
+                                <MenuItem value="Mail Sent">Mail Sent</MenuItem>
+                                <MenuItem value="Accepted">Accepted</MenuItem>
+                                <MenuItem value="Rejected">Rejected</MenuItem>
+                            </Select>
+                        </Toolbar>
+                    </Box>
                     <Paper
                         elevation={3}
                         sx={{
@@ -318,26 +364,19 @@ const Admin = () => {
                         }}
                     >
                         <DataGrid
-                            rows={rows}
+                            rows={filteredRows}
                             columns={columns}
                             getRowId={(row) => row.id}
                             pagination
-                            // paginationModel={paginationModel}
-                            // onPaginationModelChange={(newPaginationModel) =>
-                            //     setPaginationModel(newPaginationModel)
-                            // }
-                            // pageSizeOptions={[5, 10]}
                             initialState={{ pagination: { paginationModel } }}
                             pageSizeOptions={[5, 10]}
                             checkboxSelection
                             disableSelectionOnClick
                             resizable={false}
                             getRowClassName={() => "row-cell"}
-                            // isRowSelectable={(params) => params.row.status !== 'Accepted' && params.row.status !== 'Rejected' }
                             onRowSelectionModelChange={(
                                 newRowSelectionModel
                             ) => {
-                                // console.log(newRowSelectionModel)
                                 setSelectedApplicants(newRowSelectionModel)
                             }}
                             sx={{

@@ -9,25 +9,6 @@ const config = require("../utils/config")
 const { adminAuthentication } = require ("../utils/middleware")
 
 
-adminRouter.post("/", async (req, res, next) => {
-    const { name, password, email } = req.body
-    const saltrounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltrounds)
-
-    const newAdmin = new Admin({ name, password: hashedPassword, email })
-
-    try {
-        const result = await newAdmin.save()
-        if (result) {
-            return res.status(200).json({
-                success: true,
-                result,
-            })
-        }
-    } catch (error) {
-        next(error)
-    }
-})
 
 adminRouter.post("/login", async (req, res) => {
     const { email, password } = req.body

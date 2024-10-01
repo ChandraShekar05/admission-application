@@ -49,3 +49,4 @@ courseRouter.delete("/:id",adminAuthentication, async (req, res, next) => {
     }
 })
 
+module.exports = courseRouter;

@@ -12,6 +12,7 @@ const config = require("./utils/config")
 const mailRouter = require("./sendMail/mail")
 const router = require("./sendMail/email")
 const adminRouter = require("./controllers/admin")
+const superAdminRouter = require("./controllers/superAdmin")
 // const { adminAuthentication } = require('./utils/middleware')
 
 mongoose.set("strictQuery", false)
@@ -42,6 +43,7 @@ app.use("/api/courses", courseRouter)
 app.use("/api/mail", mailRouter)
 app.use("/api/send-email", router)
 app.use("/api/admin", adminRouter)
+app.use("/api/superAdmin", superAdminRouter)
 
 // handler for error handling during requests
 app.use(middleware.errorHandler)
