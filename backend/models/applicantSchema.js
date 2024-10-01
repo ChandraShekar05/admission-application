@@ -1,7 +1,5 @@
 const mongoose = require("mongoose")
 
-
-
 const applicantSchema = new mongoose.Schema(
     {
         // Personal Information
@@ -38,7 +36,7 @@ const applicantSchema = new mongoose.Schema(
                 trim: true,
                 // eslint-disable-next-line no-useless-escape
                 match: [/.+\@.+\..+/, "Please enter a valid email address"],
-                unique:true
+                unique: true,
             },
         },
 
@@ -88,15 +86,28 @@ const applicantSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ["Open", "Mail Sent", "Followup", "Accepted", "Rejected"],
+            enum: [
+                "Open",
+                "In Pipeline",
+                "Next Batch",
+                "CLosed-Won",
+                "Closed-Lost",
+                "Spam",
+                "No Ansewer",
+            ],
             default: "Open",
             required: [true, "Status is required"],
+        },
+        remarks: {
+            type: [String],
+            default: [],
+            required: [true, "Remarks is required"],
         },
         lastUpdatedBy: {
             type: String,
             required: [true, "Last Updated by"],
             trim: true,
-            default: 'user',
+            default: "user",
 
             /* type: mongoose.Schema.Types.ObjectId, // Assuming Admins are stored in a separate collection
     ref: 'Admin',
@@ -116,33 +127,35 @@ applicantSchema.set("toJSON", {
         delete returnedObject._id
         delete returnedObject.__v
 
-
         // Format the date
         if (returnedObject.createdAt) {
             // Adjust the timezone as needed
-            returnedObject.createdAt = new Date(returnedObject.createdAt).toLocaleString("en-US", {
+            returnedObject.createdAt = new Date(
+                returnedObject.createdAt
+            ).toLocaleString("en-US", {
                 timeZone: "Asia/Kolkata", // Change to your desired timezone
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short',
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                timeZoneName: "short",
             })
-            returnedObject.updatedAt = new Date(returnedObject.updatedAt).toLocaleString("en-US", {
+            returnedObject.updatedAt = new Date(
+                returnedObject.updatedAt
+            ).toLocaleString("en-US", {
                 timeZone: "Asia/Kolkata", // Change to your desired timezone
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZoneName: 'short',
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                timeZoneName: "short",
             })
         }
     },
-
 })
 
 module.exports = mongoose.model("Applicant", applicantSchema)

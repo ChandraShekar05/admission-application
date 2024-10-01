@@ -64,13 +64,14 @@ applicantRouter.delete("/:id", async (request, response, next) => {
 
 applicantRouter.put("/:id", adminAuthentication, async (req, res, next) => {
     const id = req.params.id
-    const { status } = req.body
+    const { status, remarks } = req.body
     const lastUpdatedBy = req.admin.name
+    const newRemark = `${remarks} - ${lastUpdatedBy}`
 
     try {
         const applicant = await Blog.findByIdAndUpdate(
             id,
-            { status, lastUpdatedBy },
+            { status, lastUpdatedBy, $push: { remarks: newRemark } },
             { new: true, runValidators: true }
         ).populate("preferredCourse.course", {
             name: 1,

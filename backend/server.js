@@ -14,7 +14,7 @@ const router = require("./sendMail/email")
 const adminRouter = require("./controllers/admin")
 // const { adminAuthentication } = require('./utils/middleware')
 
-mongoose.set("strictQuery", false)
+// mongoose.set("strictQuery", false)
 
 logger.info("connecting to", config.MONGODB_URI)
 
@@ -24,6 +24,7 @@ mongoose
         logger.info("connected to MongoDB")
     })
     .catch((error) => {
+        console.log(error)
         logger.error("error connection to MongoDB:", error.message)
     })
 

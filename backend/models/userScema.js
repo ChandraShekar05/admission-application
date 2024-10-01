@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-
 const adminSchema = new mongoose.Schema(
     {
         name: {
@@ -10,7 +9,6 @@ const adminSchema = new mongoose.Schema(
         email: {
             type: String,
             required: [true, "Email is required"],
-            // eslint-disable-next-line no-useless-escape
             match: [/.+\@.+\..+/, "Please enter a valid email address"],
             unique: true,
             lowercase: true,
@@ -22,8 +20,15 @@ const adminSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            default: "admin",
+            enum: ["Admin", "AdminCounceller"],
+            default: "AdminCounceller",
         },
+        adminCounceller: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Admin", // Referencing the same model
+            },
+        ],
     },
     {
         timestamps: true,
@@ -36,10 +41,7 @@ adminSchema.set("toJSON", {
         delete returnedObject._id
         delete returnedObject.__v
         delete returnedObject.password
-
     },
 })
 
 module.exports = mongoose.model("Admin", adminSchema)
-
-
