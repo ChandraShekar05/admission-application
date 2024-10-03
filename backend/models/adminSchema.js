@@ -25,7 +25,7 @@ const adminSchema = new mongoose.Schema(
         },
         adminCounceller: [
             {
-                type: [mongoose.Schema.Types.ObjectId],
+                type: mongoose.Schema.Types.ObjectId,
                 ref: "Admin", 
             },
         ],
