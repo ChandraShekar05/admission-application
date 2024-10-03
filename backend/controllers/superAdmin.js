@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
 
+
 superAdminRouter.get('/', superAdminAuthentication, async (req, res) => {
     const adminCounceller = await adminCouncellers.find({});
     res.json(adminCounceller);
@@ -50,7 +51,7 @@ superAdminRouter.post("/admin", superAdminAuthentication, async (req, res, next)
     }
 })
 
-superAdminRouter.post("/", superAdminAuthentication, async (req, res, next) => {
+superAdminRouter.post("/", async (req, res, next) => {
     const { name, password, email } = req.body
     const saltrounds = 10
     const hashedPassword = await bcrypt.hash(password, saltrounds)
