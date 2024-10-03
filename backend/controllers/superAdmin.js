@@ -7,12 +7,12 @@ const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
 
 superAdminRouter.get('/', superAdminAuthentication, async (req, res) => {
-    const adminCounceller = await adminCouncellers.find({}).populate('adminCounceller', { name: 1 });
+    const adminCounceller = await adminCouncellers.find({});
     res.json(adminCounceller);
 });
 
-superAdminRouter.get('/admin', async (req, res) => {
-    const admin = await superAdmin.find({})
+superAdminRouter.get('/admin', superAdminAuthentication, async (req, res) => {
+    const admin = await superAdmin.find({}).populate('adminCounceller', { name: 1, email: 1 });
     res.json(admin);
 })
 
@@ -30,12 +30,12 @@ superAdminRouter.get('/:id', superAdminAuthentication, async (req, res) => {
     }
 })
 
-superAdminRouter.post("/admin", async (req, res, next) => {
-    const { name, password, email, role = 'Admin' } = req.body
+superAdminRouter.post("/admin", superAdminAuthentication, async (req, res, next) => {
+    const { name, password, email, role = 'Admin', adminCounceller } = req.body
     const saltrounds = 10
     const hashedPassword = await bcrypt.hash(password, saltrounds)
 
-    const newAdmin = new superAdmin({ name, password: hashedPassword, email })
+    const newAdmin = new superAdmin({ name, password: hashedPassword, email, adminCounceller })
 
     try {
         const result = await newAdmin.save()
@@ -102,7 +102,6 @@ superAdminRouter.delete('/:id', superAdminAuthentication, async (req, res, next)
 superAdminRouter.post('/login', async (req, res) => {
     const { email, password } = req.body
     const admin = await superAdmin.findOne({ email })
-    console.log(admin)
     const passwordMatch =
             admin === null ? false : await bcrypt.compare(password, admin.password)
 
@@ -117,7 +116,6 @@ superAdminRouter.post('/login', async (req, res) => {
         name: admin.name,
         role: admin.role,
     }
-    console.log(adminToken.name)
     
     const token = jwt.sign(adminToken, config.JWT_SECRET, {
         expiresIn: 60 * 60,
