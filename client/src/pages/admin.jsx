@@ -317,10 +317,12 @@ const Admin = () => {
                     </Typography>
                     <Box sx={{ display: "flex", justifyContent: "space-between"}}>
                         {selectedApplicants.length >= 0 && (
-                            <IconButton
+                        <Button
                             variant="rounded"
                             color="#2C3333"
                             sx={{
+                                backgroundColor: "#2C3333",
+                                color: "white",   
                                 '& .MuiButtonBase-root' :{
                                     padding: 0,
                                 },
@@ -331,8 +333,8 @@ const Admin = () => {
                             }}
                             onClick={handleSendMail}
                         >
-                            <EmailIcon sx={{fontSize: 'xx-large'}}/>
-                        </IconButton>
+                            Send Mail
+                        </Button>
                         )}
                         <Toolbar sx={{ justifyContent: "flex-end" }}>
                             <Select

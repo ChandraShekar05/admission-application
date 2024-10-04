@@ -1,26 +1,42 @@
 import { useEffect, useState } from 'react';
-
+import Cookies from 'js-cookie';
 import { tokenValidation } from '../../services/login';
-
+import { adminTokenValidation } from '../../services/superAdminApi';
 import NoAccess from '../../assets/NoAccess.svg'
 import { Box, Typography } from '@mui/material';
 
 const ProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null); // State to hold authentication status
-
+    
     useEffect(() => {
+        // Extract the role from the superAdminAuth cookie
+        let role = "AdminCounceller";
+        role = Cookies.get('userRole');
 
-        // Example of server-side validation (you may need to adjust the API endpoint)
-        tokenValidation()
-        .then(response => {
-            if (response.success) {
-                setIsAuthenticated(true); // Token is valid
-            } else {
-                setIsAuthenticated(false); // Token is invalid
-            }
-        })
-        .catch(() => setIsAuthenticated(false)); // Handle network errors
+        // Conditionally call the validation function based on the role
+        if (role === 'Admin') {
+            adminTokenValidation()
+                .then(response => {
+                    if (response.success) {
+                        setIsAuthenticated(true); // Admin token is valid
+                    } else {
+                        setIsAuthenticated(false); // Admin token is invalid
+                    }
+                })
+                .catch(() => setIsAuthenticated(false)); // Handle network errors for admin token validation
+        } else {
+            tokenValidation()
+                .then(response => {
+                    if (response.success) {
+                        setIsAuthenticated(true); // Token is valid
+                    } else {
+                        setIsAuthenticated(false); // Token is invalid
+                    }
+                })
+                .catch(() => setIsAuthenticated(false)); // Handle network errors for user token validation
+        }
     }, []);
+
 
     if (isAuthenticated === null) {
         return <div>Loading...</div>; // Optional: Show a loading state

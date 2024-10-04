@@ -1,9 +1,9 @@
 const applicantRouter = require("express").Router()
 const Blog = require("../models/applicantSchema")
 
-const { adminAuthentication } = require("../utils/middleware")
-
-applicantRouter.get("/", adminAuthentication, async (request, response) => {
+const { adminAuthentication, superAdminAuthentication, } = require("../utils/middleware")
+const roleBasedAuthentication = require("../utils/roleBasedAuthentication")
+applicantRouter.get("/", async (request, response) => {
     const blogs = await Blog.find({})
         .populate("preferredCourse.course", {
             name: 1,
@@ -14,7 +14,6 @@ applicantRouter.get("/", adminAuthentication, async (request, response) => {
 
 applicantRouter.get(
     "/:id",
-    adminAuthentication,
     async (request, response, next) => {
         const id = request.params.id
         try {
@@ -62,7 +61,7 @@ applicantRouter.delete("/:id", async (request, response, next) => {
     }
 })
 
-applicantRouter.put("/:id", adminAuthentication, async (req, res, next) => {
+applicantRouter.put("/:id", roleBasedAuthentication, async (req, res, next) => {
     const id = req.params.id
     let { status, remarks } = req.body
     if(!remarks)

@@ -1,22 +1,23 @@
 const superAdminRouter = require('express').Router();
 const adminCouncellers = require('../models/userScema');
 const superAdmin = require('../models/adminSchema');
-const { superAdminAuthentication } = require ("../utils/middleware")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
+const { superAdminAuthentication } = require('../utils/middleware');
 
-superAdminRouter.get('/', superAdminAuthentication, async (req, res) => {
+
+superAdminRouter.get('/', async (req, res) => {
     const adminCounceller = await adminCouncellers.find({});
     res.json(adminCounceller);
 });
 
-superAdminRouter.get('/admin', superAdminAuthentication, async (req, res) => {
+superAdminRouter.get('/admin', async (req, res) => {
     const admin = await superAdmin.find({}).populate('adminCounceller', { name: 1, email: 1 });
     res.json(admin);
 })
 
-superAdminRouter.get('/:id', superAdminAuthentication, async (req, res) => {
+superAdminRouter.get('/:id', async (req, res) => {
     const id  = req.params.id;
     try{
         const adminCounceller = await adminCouncellers.findById(id);
@@ -30,7 +31,7 @@ superAdminRouter.get('/:id', superAdminAuthentication, async (req, res) => {
     }
 })
 
-superAdminRouter.post("/admin", superAdminAuthentication, async (req, res, next) => {
+superAdminRouter.post("/admin", async (req, res, next) => {
     const { name, password, email, role = 'Admin', adminCounceller } = req.body
     const saltrounds = 10
     const hashedPassword = await bcrypt.hash(password, saltrounds)
@@ -50,11 +51,10 @@ superAdminRouter.post("/admin", superAdminAuthentication, async (req, res, next)
     }
 })
 
-superAdminRouter.post("/", superAdminAuthentication, async (req, res, next) => {
-    const { name, password, email } = req.body
-    const saltrounds = 10
-    const hashedPassword = await bcrypt.hash(password, saltrounds)
-
+superAdminRouter.post("/", async (req, res, next) => {
+    const { name, password, email } = req.body;
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newAdmin = new adminCouncellers({ name, password: hashedPassword, email })
 
     try {
@@ -70,7 +70,7 @@ superAdminRouter.post("/", superAdminAuthentication, async (req, res, next) => {
     }
 })
 
-superAdminRouter.put('/:id', superAdminAuthentication, async (req, res, next) => {
+superAdminRouter.put('/:id', async (req, res, next) => {
     const { id } = req.params;
     const adminCounceller = req.body;
     try{
@@ -85,7 +85,7 @@ superAdminRouter.put('/:id', superAdminAuthentication, async (req, res, next) =>
     }
 })
 
-superAdminRouter.delete('/:id', superAdminAuthentication, async (req, res, next) => {
+superAdminRouter.delete('/:id', async (req, res, next) => {
     const { id } = req.params;
     try{
         const deletedAdminCouncellor = await adminCouncellers.findByIdAndDelete(id);
@@ -120,7 +120,7 @@ superAdminRouter.post('/login', async (req, res) => {
     const token = jwt.sign(adminToken, config.JWT_SECRET, {
         expiresIn: 60 * 60,
     })
-    res.cookie("superAdminAuth", token, {
+    res.cookie("adminAuth", token, {
         httpOnly: true,
         secure: false,
         maxAge: 3600000, // Cookie expiration time in milliseconds (1 hour)
@@ -134,11 +134,11 @@ superAdminRouter.post('/login', async (req, res) => {
 })
 
 superAdminRouter.post('/logout', async (req, res) => {
-    res.clearCookie('superAdminAuth');
+    res.clearCookie("adminAuth", { path: "/", httpOnly: true, secure: false, sameSite: "Lax" })
     res.status(200).json({ message: 'Logout successful' });
 })  
 
-superAdminRouter.post("/validateToken", superAdminAuthentication, (req, res) => {
+superAdminRouter.post("/validateToken", (req, res) => {
     res.status(200).json({ success: true, message: "Valid Token" })
     // res.clearCookie('adminAuth', { secure: false, httpOnly: false, path: '/' })
 })
