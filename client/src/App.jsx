@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage"
 
 
 import ProtectedRoute from "./components/admin/ProtectedRoute"
+import SuperAdmin from "./pages/SuperAdmin"
 function App() {
     return (
         <Router>
@@ -18,6 +19,7 @@ function App() {
                     <Route index element={<Admin />} />
                     <Route path="applicants/:id" element={<ApplicantData />} />
                     <Route path="courses" element={<CoursesPage />} />
+                    <Route path="superadmin" element={ <SuperAdmin /> } />
                 </Route>
             </Routes>
         </Router>

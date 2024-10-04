@@ -12,7 +12,6 @@ const { adminAuthentication } = require ("../utils/middleware")
 
 adminRouter.post("/login", async (req, res) => {
     const { email, password } = req.body
-    console.log(email)
     const admin = await Admin.findOne({ email })
     const passwordMatch =
         admin === null ? false : await bcrypt.compare(password, admin.password)

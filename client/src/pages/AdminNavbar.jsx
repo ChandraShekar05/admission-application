@@ -16,17 +16,18 @@ import {
 } from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu"
 
-import { Link, Outlet } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 
 import { logout } from '../services/login';
+import Cookies from 'js-cookie';
 
 const drawerWidth = 300
-const navItems = ["Applications", "Courses"]
-const navLinks = ["/admin", "courses"]
+const navItems = [ "Admins", "Applications", "Courses"]
+const navLinks = ["superadmin", "/admin", "courses"]
 
 function AdminNavbar() {
     const [mobileOpen, setMobileOpen] = useState(false)
-
+    const navigate = useNavigate()
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState)
     }
@@ -41,6 +42,16 @@ function AdminNavbar() {
             .catch((error) => console.log(error))
 
         }
+
+        const handleAdminClick = () => {
+            const role = Cookies.get('userRole');
+            if (role === 'Admin') {
+                navigate("superadmin");
+            } else {
+                alert("You are not authorized");
+            }
+        };
+
         const drawer = (
             <Box sx={{ textAlign: "center", p: 2 }}>
                 <Typography
@@ -135,8 +146,9 @@ function AdminNavbar() {
                             {navItems.map((item, index) => (
                                 <Button
                                     key={item}
-                                    component={Link}
-                                    to={navLinks[index]}
+                                    component={item === "Admins" ? "button" : Link}
+                                    to={item === "Admins" ? undefined : navLinks[index]}
+                                    onClick={item === "Admins" ? handleAdminClick : undefined}
                                     sx={{
                                         color: "#ffffff",
                                         fontSize: "14px",

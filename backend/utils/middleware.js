@@ -29,8 +29,7 @@ const errorHandler = (error, req, res, next) => {
 }
 
 const superAdminAuthentication = (req, res, next) => {
-    const token = req.cookies.superAdminAuth;
-
+    const token = req.cookies.adminAuth;
     if (!token) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -40,7 +39,7 @@ const superAdminAuthentication = (req, res, next) => {
         if (decodedToken.role !== 'Admin') {
             return res.status(403).json({ error: 'Forbidden: Access is denied' });
         }
-        req.user = decodedToken;
+        req.admin = decodedToken;
         next();
     } catch (error) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -65,9 +64,8 @@ const adminAuthentication = (req, res, next) => {
                 .json({ message: "Unauthorized: No Access" })
 
         }
-
         req.admin = decoded
-
+        console.log('decoded',decoded)
         next()
     } catch (error) {
         return res.status(403).json({ message: "Invalid or expired token" })
@@ -76,6 +74,6 @@ const adminAuthentication = (req, res, next) => {
 module.exports = {
     unknownEndpoint,
     errorHandler,
-    superAdminAuthentication,
     adminAuthentication,
+    superAdminAuthentication
 }
