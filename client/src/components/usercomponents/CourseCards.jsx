@@ -10,7 +10,6 @@ function CourseCards({ name, subheader, description, amount, scrollToForm }) {
         width: '500px',
         borderRadius: 3,
         p: 1,
-        // mb: 5,
         transition: '0.3s', 
         '&:hover': {
           transform: 'scale(1.03)', 
@@ -18,7 +17,7 @@ function CourseCards({ name, subheader, description, amount, scrollToForm }) {
         },
       }}
     >
-      <CardContent sx={{ borderRadius: 2, backgroundColor: '#E7F6F2', minHeight: 150 }}>
+      <CardContent sx={{ borderRadius: 2, backgroundColor: 'rgba(245, 245, 245, 0.7)', minHeight: 150 }}>
         <CardHeader
           title={name}
           subheader={subheader}

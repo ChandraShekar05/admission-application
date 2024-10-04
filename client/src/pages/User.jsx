@@ -2,6 +2,7 @@ import Form from '../components/usercomponents/Form'
 import DrawerAppBar from '../components/usercomponents/DrawerAppBar';
 import CompanyInfo from '../components/usercomponents/CompanyInfo';
 import CourseCards from '../components/usercomponents/CourseCards';
+import Reviews from '../components/usercomponents/Reviews'
 import Footer from '../components/usercomponents/Footer';
 import { useEffect, useState, useRef } from 'react';
 import { getAllCourses } from '../services/coursesApi';
@@ -53,11 +54,11 @@ const User = () => {
                 <CompanyInfo />
             </div>
             <Container sx={{mb:5,userSelect:'none'}} maxWidth="lg">
-                <Typography variant='h3'color='#395B64' textAlign={'center'} sx={{mb:2,
-                                fontSize: '2rem',
+                <Typography variant='h1'color='black' textAlign={'center'} sx={{mb:4,mt:5,
+                                fontSize: '2.3rem',
                                 fontWeight: 'bold',
                                 }}
-                >Availabe Courses</Typography>
+                >All the skills you need in one place</Typography>
                 <div ref={courseCardsRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
                     {courses.map((course, index) => (
                         <CourseCards
@@ -74,6 +75,7 @@ const User = () => {
             <div  ref={formRef}>
                 <Form courses={courses} />
             </div>
+            <Reviews />
             <div  ref={contactsRef}>
                 <Footer />
             </div>

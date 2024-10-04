@@ -31,7 +31,7 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
   const drawer = (
     <Box sx={{ textAlign: 'center', p: 2 }}>
       <Typography variant="h5" color="#2C3333" sx={{ fontWeight: '700', my: 2 }}>
-        Lisan Al Gaib
+        Gradious
       </Typography>
       <Divider sx={{ my: 2 }} />
       <List>
@@ -39,12 +39,22 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
           <ListItem key={item} disablePadding>
             <ListItemButton
               sx={{
-                color: '#395B64',
+                color: '#000000', 
                 textAlign: 'center',
                 borderRadius: '8px',
                 transition: 'background 0.3s',
                 '&:hover': {
                   backgroundColor: '#D6E4E5',
+                  '&::after': {
+                    content: '""',
+                    display: 'block',
+                    height: '2px', 
+                    backgroundColor: '#000000', 
+                    width: '100%', 
+                    position: 'absolute',
+                    bottom: '0',
+                    left: '0',
+                  },
                 },
               }}
               onClick={() => handleItemClick(item)}
@@ -63,27 +73,25 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
     <Box>
       <CssBaseline />
       <AppBar
-        elevation={3}
+        elevation={5}
         sx={{
           position: 'sticky',
           top: '0',
-          background: 'linear-gradient(90deg, #2C3333 0%, #395B64 100%)', // Gradient background
+          height: '90px', 
+          background: 'white',
           zIndex: 1100,
           transition: 'background 0.3s ease-in-out',
           boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
         }}
         component="nav"
       >
-        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 3 } }}>
+        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 1, sm: 3 }, height: '100%' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography
-              variant="h5"
-              component="div"
-              color="#ffffff"
-              sx={{ fontWeight: '700', display: { xs: 'none', sm: 'block' } }}
-            >
-              Lisan Al Gaib
-            </Typography>
+            <img
+              src="https://gradious.com/wp-content/uploads/2021/09/Final-Logo-2.svg"
+              alt="Gradious Logo"
+              style={{ height: '70px', paddingLeft : '20px'}} 
+            />
           </Box>
           <IconButton
             color="inherit"
@@ -97,46 +105,55 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
               <Button
-              key={item}
-              sx={{
-                color: '#ffffff',
-                fontSize: "14px",
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                px:1,
-                py:2,
-
-                mr:1,
-                position: 'relative',
-                opacity: 0.75,
-                transition: 'opacity 0.3s, background-color 0.3s',
-                '&:hover': {
-                  opacity: 1,
-                  color: '#ffffff',
-                  '&::before': {
-                    width: '100%', // full width on hover
+                key={item}
+                sx={{
+                  color: '#000000', 
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  px: 2,
+                  py: 2,
+                  mr: 1,
+                  position: 'relative',
+                  opacity: 0.75,
+                  transition: 'opacity 0.3s, background-color 0.3s',
+                  '&:hover': {
+                    opacity: 1,
+                    color: '#000000', 
+                    '&::before': {
+                      width: '100%',
+                    },
+                    '&::after': {
+                      content: '""',
+                      display: 'block',
+                      height: '2px', 
+                      backgroundColor: '#000000', 
+                      width: '100%', 
+                      position: 'absolute',
+                      bottom: '10px',
+                      left: '0',
+                    },
                   },
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: '10px',
-                  left: '0',
-                  height: '5px',
-                  width: '0%',
-                  backgroundColor: '#ffffff',
-                  transition: 'width 0.3s',
-                },
-              }}
-              onClick={() => {
-                if (item === 'Courses' && scrollToCourses) scrollToCourses();
-                else if (item === 'Contact' && scrollToContact) scrollToContact();
-                else if (item === 'Home' && scrollToHome) scrollToHome();
-                else if (item === 'About' && scrollToAbout) scrollToAbout();
-              }}
-            >
-              {item}
-            </Button>
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: '10px',
+                    left: '0',
+                    height: '5px',
+                    width: '0%',
+                    backgroundColor: '#ffffff',
+                    transition: 'width 0.3s',
+                  },
+                }}
+                onClick={() => {
+                  if (item === 'Courses' && scrollToCourses) scrollToCourses();
+                  else if (item === 'Contact' && scrollToContact) scrollToContact();
+                  else if (item === 'Home' && scrollToHome) scrollToHome();
+                  else if (item === 'About' && scrollToAbout) scrollToAbout();
+                }}
+              >
+                {item}
+              </Button>
             ))}
           </Box>
         </Toolbar>
@@ -164,11 +181,8 @@ function DrawerAppBar({ window, scrollToCourses, scrollToContact, scrollToHome, 
           {drawer}
         </Drawer>
       </nav>
-
-  
     </Box>
   );
 }
 
 export default DrawerAppBar;
-

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState} from "react"
 import axios from "axios"
 import Grid from "@mui/material/Grid"
 import {
@@ -12,6 +12,8 @@ import {
     Box,
     Paper,
     Typography,
+    Snackbar,
+    Alert,
 } from "@mui/material"
 import Thankyou from "./Thankyou"
 
@@ -49,10 +51,74 @@ export default function Form({ courses }) {
     // Referral Information
     const [howDidYouHearAboutUs, setHowDidYouHearAboutUs] = useState("")
 
+    // Snackbar state
+    const [openSnackbar, setOpenSnackbar] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+
     const [isSubmitted, setIsSubmitted] = useState(false)
+
+    // Close snackbar function
+    const handleCloseSnackbar = () => {
+        setOpenSnackbar(false)
+    }
+
+    // Validation function
+    const validateForm = () => {
+        if (fullName.length > 20) {
+            setErrorMessage("Full Name should be less than 20 characters")
+            setOpenSnackbar(true)
+            return false
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(emailAddress)) {
+            setErrorMessage("Please enter a valid email address")
+            setOpenSnackbar(true)
+            return false
+        }
+        const phoneRegex = /^[0-9]{10}$/
+        if (!phoneRegex.test(phoneNumber)) {
+            setErrorMessage("Phone number should be a valid 10-digit number")
+            setOpenSnackbar(true)
+            return false
+        }
+        if (!dateOfBirth) {
+            setErrorMessage("Please enter your date of birth")
+            setOpenSnackbar(true)
+            return false
+        }
+        if (!gender) {
+            setErrorMessage("Please select your gender")
+            setOpenSnackbar(true)
+            return false
+        }
+        if (!highestQualification || !yearOfPassing || !percentageCGPA) {
+            setErrorMessage(
+                "Please fill in all fields for educational qualifications"
+            )
+            setOpenSnackbar(true)
+            return false
+        }
+        if (!preferredCourse || !reason) {
+            setErrorMessage("Please select a preferred course and provide a reason")
+            setOpenSnackbar(true)
+            return false
+        }
+        if (!howDidYouHearAboutUs) {
+            setErrorMessage("Please let us know how you heard about us")
+            setOpenSnackbar(true)
+            return false
+        }
+        return true
+    }
 
     const collectData = async (e) => {
         e.preventDefault()
+
+        // Perform form validation
+        if (!validateForm()) {
+            return
+        }
+
         try {
             let result = await fetch("http://localhost:3001/api/applications", {
                 method: "post",
@@ -125,18 +191,17 @@ export default function Form({ courses }) {
     if (isSubmitted) {
         return <Thankyou />
     }
-
     return (
         <Box
             component="main"
             sx={{
                 py: 4,
-                background: "#E7F6F2",
+                background: "rgba(245, 245, 245, 0.7)",
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                userSelect:'none'
+                userSelect: 'none'
             }}
         >
             <Container sx={{ width: "auto" }}>
@@ -355,19 +420,18 @@ export default function Form({ courses }) {
                             </Grid>
 
                             {/* Submit Button */}
-                            <Grid item xs={12}>
+                            <Grid item xs={12}sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Button
                                     variant="contained"
-                                    // color="primary"
                                     type="submit"
                                     sx={{
                                         py: 1,
-                                        backgroundColor: "#4D6666",
+                                        backgroundColor: "black",
                                         color: "#E7F6F2",
                                         fontSize: "1rem",
                                         fontWeight: "bold",
+                                        
                                     }}
-                                    fullWidth
                                 >
                                     SUBMIT
                                 </Button>
@@ -376,6 +440,37 @@ export default function Form({ courses }) {
                     </form>
                 </Paper>
             </Container>
+            {/* Snackbar for error messages */}
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={4000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={handleCloseSnackbar}
+                    severity="error"
+                    sx={{ backgroundColor: '#000', color: '#fff' }}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
+
         </Box>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
