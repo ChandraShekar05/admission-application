@@ -36,6 +36,7 @@ function AdminNavbar() {
         logout()
             .then((data) => {
                 if (data.success) {
+                    Cookies.remove("userRole");
                     window.location.href = "/login"
                 }
             })
