@@ -73,3 +73,22 @@ The backend server should now be running on `http://localhost:3001`.
 ```sh
     npm run dev
 ```
+
+## Add a new Admin
+
+To add a new admin using Postman or ThunderClient, follow these steps:
+
+1. Open Postman or ThunderClient.
+2. Create a new POST request to the following URL:
+    ```
+    http://localhost:3001/api/superAdmin/admin
+    ```
+3. Set the request body to `JSON` format and include the new admin's details:
+    ```json
+    {
+        "name": "Admin Name",
+        "email": "admin@example.com",
+        "password": "securepassword"
+    }
+    ```
+4. Send the request.
